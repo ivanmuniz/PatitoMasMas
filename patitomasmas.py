@@ -3,23 +3,25 @@ import ply.yacc as yacc
 
 # RESERVED WORDS
 reserved = { 
-    'program': 'progam',
+    'program': 'PROGRAM',
     'var': 'VAR',
     'int': 'INT',
     'float': 'FLOAT',
     'char': 'CHAR',
-    'function': 'FUNCTION',
+    'funcion': 'FUNCION',
     'void': 'VOID',
-    'return': 'RETURN',
-    'input': 'INPUT',
-    'print': 'PRINT',
-    'if': 'IF',
-    'then': 'THEN',
-    'else': 'ELSE',
-    'while': 'WHILE',
-    'do': 'DO',
-    'from': 'FROM',
-    'until': 'UNTIL',
+    'regresa': 'REGRESA',
+    'lee': 'LEE',
+    'escribe': 'ESCRIBE',
+    'si': 'SI',
+    'entonces': 'ENTONCES',
+    'sino': 'SINO',
+    'mientras': 'MIENTRAS',
+    'haz': 'HAZ',
+    'desde': 'DESDE',
+    'hasta': 'HASTA',
+    'hacer': 'HACER',
+    'principal': 'PRINCIPAL'
 }
 
 # LIST OF TOKENS
@@ -45,7 +47,7 @@ t_CLOSECURL = r'\}'
 t_COLON = r'\:'
 t_GREATERTHAN = r'\>'
 t_LESSTHAN = r'\<'
-t_NOTEQUAL = r'\<>'
+t_NOTEQUAL = r'\!='
 
 # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t\n'
@@ -70,7 +72,7 @@ def t_CTESTRING(t):
     return t
 
 def t_CTECHAR(t):
-    r'\w'
+    r'\'[\w]\''
     return t
 
 def t_ID(t):
