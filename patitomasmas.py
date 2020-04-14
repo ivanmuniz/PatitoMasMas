@@ -3,7 +3,7 @@ import ply.yacc as yacc
 
 # RESERVED WORDS
 reserved = { 
-    'program': 'PROGRAM',
+    'programa': 'PROGRAMA',
     'var': 'VAR',
     'int': 'INT',
     'float': 'FLOAT',
@@ -29,7 +29,7 @@ tokens = [
     'ID', 'MINUS', 'PLUS', 'TIMES', 'DIVIDE',
     'SEMICOLON', 'OPENPAREN', 'CLOSEPAREN',
     'COMMA', 'OPENCURL', 'CLOSECURL', 'COLON', 
-    'EQUAL', 'GREATERTHAN', 'LESSTHAN', 'NOTEQUAL'
+    'EQUAL', 'GREATERTHAN', 'LESSTHAN', 'NOTEQUAL',
     'CTEI', 'CTEF', 'CTESTRING', 'CTECHAR'
 ] + list(reserved.values())
 
