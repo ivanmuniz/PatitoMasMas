@@ -1,0 +1,14 @@
+programa prueba;
+var int i1[10][10], i2[10];
+char c2;
+
+funcion void fact(int i, char c)
+var int aux;
+char auxC;
+{
+    
+}
+
+principal() {
+
+}
