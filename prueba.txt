@@ -2,13 +2,41 @@ programa prueba;
 var int i1[10][10], i2[10];
 char c2;
 
-funcion void fact(int i, char c)
+funcion int fact(int i, char c)
 var int aux;
 char auxC;
 {
-    
+    i1[10][10] = i2[3] + 3;
+    i = 0;
+    mientras(i < 10) haz {
+        escribe('prueba');
+        i = i + 1;
+    }
+    regresa(aux);
+}
+
+funcion void imprimir(char c)
+{
+    escribe(c);
 }
 
 principal() {
+    auxC = 'z';
+    si(5 >= 4 && 3 == 2)
+    entonces
+    {
+        auxC = 'z';
+    } sino {
+        auxC = "c";
+    }
+    i = 5;
+    c = fact(int i, char c);
+    lee(iNum);
+    escribe("jose comio ", iNum, "tacos");
 
+    imprimir(char c);
+
+    desde i=1 hasta i==10 hacer {
+        escribe("prueba");
+    }
 }
