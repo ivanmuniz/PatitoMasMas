@@ -1,4 +1,10 @@
 .DS_Store
+
+ply/__pycache__
 __pycache__
 parser.out
 parsetab.py
+
+Bitacoras/
+Commits/
+Zips Avances/
