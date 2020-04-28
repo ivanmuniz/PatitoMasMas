@@ -1,6 +1,9 @@
 import ply.lex as lex
 import ply.yacc as yacc
+from functions_table import FunctionsTable
 import sys
+
+funcs_table = FunctionsTable()
 
 # RESERVED WORDS
 reserved = { 
@@ -98,6 +101,8 @@ def p_programa(p):
     '''
         programa : PROGRAMA ID SEMICOLON declaraciones funciones PRINCIPAL OPENPAREN CLOSEPAREN bloque
     '''
+    p[0] = "PROGRAM COMPILED"
+    print(funcs_table.table)
 
 # ----------------------- Declaración de variables ----------------------------------
 def p_declaraciones(p):
@@ -111,6 +116,7 @@ def p_var_dec_type(p):
         var_dec_type : tipo var_dec SEMICOLON
             | tipo var_dec SEMICOLON var_dec_type
     '''
+    funcs_table.add_vars(p[2], p[1])
 
 def p_var_dec(p):
     '''
@@ -123,12 +129,18 @@ def p_var_dec(p):
 
     '''
 
+    # Esto itera por la gramatica y regresa las variables
+    p[0] = ''
+    for i in range(1, len(p)):
+        p[0] += str(p[i])
+    
 def p_tipo(p):
     '''
         tipo : INT
             | FLOAT
             | CHAR
     '''
+    p[0] = p[1]
 # ------------------------ Termina declaración de variables -------------------------
 
 
@@ -138,24 +150,33 @@ def p_funciones(p):
         funciones : FUNCION retorno ID OPENPAREN parametros_funcion CLOSEPAREN declaraciones bloque funciones
             | empty     
     '''
+    if p[1] != None:
+        funcs_table.add_function(p[3], p[2])
+        if p[5] != None:
+            funcs_table.add_params(p[5])
 
 def p_parametros_funcion(p):
     '''
         parametros_funcion : variables_funcion
             | empty
     '''
+    p[0] = p[1]
 
 def p_variables_funcion(p):
     '''
         variables_funcion : tipo ID
             | tipo ID COMMA variables_funcion
     '''
+    p[0] = ''
+    for i in range(1, len(p)):
+        p[0] += p[i] + " "
 
 def p_retorno(p):
     '''
         retorno : tipo
             | VOID
     '''
+    p[0] = p[1]
 # ---------------------------------- Termina funciones ------------------------------
 
 def p_bloque(p):
