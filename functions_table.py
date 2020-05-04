@@ -4,22 +4,26 @@ class FunctionsTable:
             'global': { 'type': 'void', 'vars': [] }, 
             'principal': { 'type': 'void', 'vars': [] }
         }
-        self.status = { 'current_fun': 'global' }
 
-    def add_vars(self, vars, type):
-        fun_vars = self.table[self.status['current_fun']]['vars']
-        for var in vars.split(','):
-            if any(var in var_fun.values() for var_fun in fun_vars):
-                return -1
-            self.table[self.status['current_fun']]['vars'].append({'type': type, 'name': var})
+    def add_vars(self, function, vars_dec):
+        fun_vars = self.table[function]['vars']
+        vars_dec = vars_dec.strip().split(';')
+        vars_dec.pop()
+        
+        for vars in vars_dec:
+            vars_n_type = vars.strip().split(' ')
+            type_vars = vars_n_type[0]
+            for var in vars_n_type[1].split(','):
+                if any(var in var_fun.values() for var_fun in fun_vars):
+                    return -1
+                self.table[function]['vars'].append({'type': type_vars, 'name': var})
     
     def add_function(self, function, type):
-        self.status['current_fun'] = function
         self.table[function] = { 'type': type, 'vars': [] }
     
-    def add_params(self, params):
+    def add_params(self, function, params):
         for param in params.split(','):
             param_values = param.strip().split(' ')
             var_type = param_values[0]
             var_name = param_values[1]
-            self.table[self.status['current_fun']]['vars'].append({'type': var_type, 'name': var_name})
+            self.table[function]['vars'].append({'type': var_type, 'name': var_name})

@@ -101,8 +101,12 @@ def p_programa(p):
     '''
         programa : PROGRAMA ID SEMICOLON declaraciones funciones PRINCIPAL OPENPAREN CLOSEPAREN bloque
     '''
-    p[0] = "PROGRAM COMPILED"
+    if p[4] != None:
+        funcs_table.add_vars('global', p[4])
+
     print(funcs_table.table)
+
+    p[0] = "PROGRAM COMPILED"
 
 # ----------------------- Declaración de variables ----------------------------------
 def p_declaraciones(p):
@@ -110,13 +114,19 @@ def p_declaraciones(p):
         declaraciones : VAR var_dec_type
             | empty
     '''
+    if p[1] != None:
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
 
 def p_var_dec_type(p):
     '''
         var_dec_type : tipo var_dec SEMICOLON
             | tipo var_dec SEMICOLON var_dec_type
     '''
-    funcs_table.add_vars(p[2], p[1])
+    p[0] = ''
+    for i in range(1, len(p)):
+        p[0] += p[i] + ' '
 
 def p_var_dec(p):
     '''
@@ -153,7 +163,9 @@ def p_funciones(p):
     if p[1] != None:
         funcs_table.add_function(p[3], p[2])
         if p[5] != None:
-            funcs_table.add_params(p[5])
+            funcs_table.add_params(p[3], p[5])
+            if p[7] != None:
+                funcs_table.add_vars(p[3], p[7])
 
 def p_parametros_funcion(p):
     '''
