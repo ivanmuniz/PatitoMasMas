@@ -15,7 +15,7 @@ class FunctionsTable:
             type_vars = vars_n_type[0]
             for var in vars_n_type[1].split(','):
                 if any(var in var_fun.values() for var_fun in fun_vars):
-                    return -1
+                    raise TypeError("La variable ya existe en el scope")
                 self.table[function]['vars'].append({'type': type_vars, 'name': var})
     
     def add_function(self, function, type):
