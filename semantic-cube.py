@@ -106,8 +106,160 @@ class SemanticCube:
                 }
             },
             # TODO: Faltan los condicionales
-            '>': {},
-            '<': {},
-            '&&': {},
-            '||': {}
+            '>': {
+                'int' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                },
+                'float' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                },
+                'str' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'bool',
+                    'bool' : 'err'
+                },
+                'bool' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                }
+            },
+            '<': {
+                'int' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                },
+                'float' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                },
+                'str' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'bool',
+                    'bool' : 'err'
+                },
+                'bool' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                }
+            },
+            '>=': {
+                'int' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                },
+                'float' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                },
+                'str' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'bool',
+                    'bool' : 'err'
+                },
+                'bool' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                }
+            },
+            '<=': {
+                'int' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                },
+                'float' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                },
+                'str' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'bool',
+                    'bool' : 'err'
+                },
+                'bool' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                }
+            },
+            '&&': {
+                'int' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'err',
+                    'bool' : 'err'
+                },
+                'float' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'err',
+                    'bool' : 'err'
+                },
+                'str' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'err',
+                    'bool' : 'err'
+                },
+                'bool' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                }
+            },
+            '||': {
+                'int' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'err',
+                    'bool' : 'err'
+                },
+                'float' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'err',
+                    'bool' : 'err'
+                },
+                'str' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'err',
+                    'bool' : 'err'
+                },
+                'bool' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'err',
+                    'bool' : 'bool'
+                }
+            }
         }
