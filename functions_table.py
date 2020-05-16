@@ -1,8 +1,10 @@
 class FunctionsTable:
+    #TODO: incluir los el orden de los parametros como tipos en cada funcion
+    #TODO2: crear funcion para eliminar vars de las funciones, esto se aplicara cuando termine de hacer el parseo.
     def __init__(self):
         self.table = {
-            'global': { 'type': 'void', 'vars': [] }, 
-            'principal': { 'type': 'void', 'vars': [] }
+            'global': { 'type': 'void', 'vars': [], 'params': [] }, 
+            'principal': { 'type': 'void', 'vars': [], 'params': [] }
         }
 
     def add_vars(self, function, vars_dec):
@@ -19,7 +21,7 @@ class FunctionsTable:
                 self.table[function]['vars'].append({'type': type_vars, 'name': var})
     
     def add_function(self, function, type):
-        self.table[function] = { 'type': type, 'vars': [] }
+        self.table[function] = { 'type': type, 'vars': [], 'params': [] }
     
     def add_params(self, function, params):
         for param in params.split(','):
@@ -27,3 +29,4 @@ class FunctionsTable:
             var_type = param_values[0]
             var_name = param_values[1]
             self.table[function]['vars'].append({'type': var_type, 'name': var_name})
+            self.table[function]['params'].append(var_type)

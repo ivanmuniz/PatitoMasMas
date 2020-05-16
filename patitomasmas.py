@@ -1,9 +1,11 @@
 import ply.lex as lex
 import ply.yacc as yacc
-from functions_table import FunctionsTable
 import sys
+from functions_table import FunctionsTable
+from intermediate_code import IntermediateCode
 
 funcs_table = FunctionsTable()
+inter_code = IntermediateCode()
 
 # RESERVED WORDS
 reserved = { 
@@ -33,10 +35,10 @@ tokens = [
     'ID', 'MINUS', 'PLUS', 'TIMES', 'DIVIDE',
     'SEMICOLON', 'OPENPAREN', 'CLOSEPAREN',
     'COMMA', 'OPENCURL', 'CLOSECURL', 'COLON', 
-    'EQUAL', 'GREATERTHAN', 'LESSTHAN', 'NOTEQUAL', 'CEQUAL', 'GREATEROREQUAL', 'LESSEROREQUAL',
-    'AND', 'OR',
-    'CTEI', 'CTEF', 'CTESTRING', 'CTECHAR',
-    'LBRACKET', 'RBRACKET'
+    'EQUAL', 'GREATERTHAN', 'LESSTHAN', 'NOTEQUAL', 
+    'CEQUAL', 'GREATEROREQUAL', 'LESSEROREQUAL',
+    'AND', 'OR','CTEI', 'CTEF', 'CTESTRING', 
+    'CTECHAR', 'LBRACKET', 'RBRACKET'
 ] + list(reserved.values())
 
 t_MINUS = r'\-'
@@ -105,6 +107,7 @@ def p_programa(p):
         funcs_table.add_vars('global', p[4])
 
     print(funcs_table.table)
+    print(inter_code.quadruples)
 
     p[0] = "PROGRAM COMPILED"
 
@@ -226,6 +229,7 @@ def p_variable(p):
             | ID LBRACKET exp RBRACKET
             | ID LBRACKET exp RBRACKET LBRACKET exp RBRACKET
     '''
+    p[0] = p[1]
 
 def p_expresion(p):
     '''
@@ -247,25 +251,38 @@ def p_exp(p):
 
 def p_exp_ar(p):
     '''
-        exp_ar : termino
-            | termino PLUS exp_ar
-            | termino MINUS exp_ar
+        exp_ar : termino punto_quad_arithmetic
+            | termino punto_quad_arithmetic PLUS punto_meter_operador exp_ar
+            | termino punto_quad_arithmetic MINUS punto_meter_operador exp_ar
     '''
 
 def p_termino(p):
     '''
-        termino : factor
-            | factor TIMES termino
-            | factor DIVIDE termino
+        termino : factor punto_quad_arithmetic
+            | factor punto_quad_arithmetic TIMES punto_meter_operador termino
+            | factor punto_quad_arithmetic DIVIDE punto_meter_operador termino
     '''
+
+def p_punto_quad_arithmetic(p):
+    '''
+        punto_quad_arithmetic : 
+    '''
+    inter_code.quad_arithmetic()
+
+def p_punto_meter_operador(p):
+    '''
+        punto_meter_operador : 
+    '''
+    inter_code.push_operator(p[-1])
 
 def p_factor(p):
     '''
-        factor : var_cte
-            | variable
+        factor : var_cte punto_meter_operandos
+            | variable punto_meter_operandos
             | llamada_a_funcion
             | OPENPAREN exp CLOSEPAREN
     '''
+    p[0] = p[1]
 
 def p_var_cte(p):
     '''
@@ -273,6 +290,13 @@ def p_var_cte(p):
             | CTEF
             | CTECHAR
     '''
+    p[0] = p[1]
+
+def p_punto_meter_operandos(p):
+    '''
+        punto_meter_operandos : 
+    '''
+    inter_code.p_operands.append(p[-1])
 
 def p_condicion(p):
     '''

@@ -1,5 +1,6 @@
 class SemanticCube:
     def __init__(self):
+        # TODO: incluir chars
         self.cube = {
             '+': {
                 'int':{
