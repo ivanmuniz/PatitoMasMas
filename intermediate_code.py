@@ -6,6 +6,7 @@ class IntermediateCode:
         self.p_operators = []
         self.p_operands = []
         self.p_types = []
+        self.p_jumps = []
         self.quadruples = []
         self.sc = SemanticCube()
         self.scope = 'global'
@@ -20,14 +21,34 @@ class IntermediateCode:
             return
         if self.p_operators[-1] in ['*', '/', '+', '-']:
             operator = self.p_operators.pop()
-            right_operator = self.p_operands.pop()
-            left_operator = self.p_operands.pop()
+            right_operando = self.p_operands.pop()
+            print(self.p_operands)
+            left_operando = self.p_operands.pop()
+            print(self.p_operands)
 
-            right_operator_type = type(right_operator).__name__
-            left_operator_type = type(left_operator).__name__
+            right_operando_type = type(right_operando).__name__
+            left_operando_type = type(left_operando).__name__
             
-            if self.sc.cube[operator][right_operator_type][left_operator_type] == 'err':
-                raise TypeError(f"unsupported operand type(s) for {operator}: '{left_operator}' and '{right_operator}'")
+            # if self.sc.cube[operator][right_operando_type][left_operando_type] == 'err':
+            #     raise TypeError(f"unsupported operand type(s) for {operator}: '{left_operando}' and '{right_operando}'")
 
-            quad = Quadruple(operator, left_operator, right_operator, 'temp')
+            quad = Quadruple(operator, left_operando, right_operando, 'temp')
+            self.p_operands.append('temp')
+            print(self.p_operands)
             self.quadruples.append(quad)
+
+    def quad_assignment(self):
+        if self.p_operators == []:
+            return
+        
+        print("entre perro")
+        operator = self.p_operators.pop()
+        right_operando = self.p_operands.pop()
+        print(self.p_operands)
+        left_operando = self.p_operands.pop()
+        print(self.p_operands)
+        
+        quad = Quadruple(operator, right_operando, None, left_operando )
+
+        self.quadruples.append(quad)
+        print(self.p_operands)

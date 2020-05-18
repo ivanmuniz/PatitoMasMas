@@ -103,8 +103,6 @@ def p_programa(p):
     '''
         programa : PROGRAMA ID SEMICOLON declaraciones funciones PRINCIPAL OPENPAREN CLOSEPAREN bloque
     '''
-    if p[4] != None:
-        funcs_table.add_vars('global', p[4])
 
     print(funcs_table.table)
     print(inter_code.quadruples)
@@ -118,9 +116,7 @@ def p_declaraciones(p):
             | empty
     '''
     if p[1] != None:
-        p[0] = p[2]
-    else:
-        p[0] = p[1]
+       funcs_table.add_vars(inter_code.scope, p[2])
 
 def p_var_dec_type(p):
     '''
@@ -160,22 +156,25 @@ def p_tipo(p):
 # ------------------------------------ Funciones ------------------------------------
 def p_funciones(p):
     '''
-        funciones : FUNCION retorno ID OPENPAREN parametros_funcion CLOSEPAREN declaraciones bloque funciones
+        funciones : FUNCION retorno ID punto_meter_funcion OPENPAREN parametros_funcion CLOSEPAREN declaraciones bloque funciones
             | empty     
     '''
-    if p[1] != None:
-        funcs_table.add_function(p[3], p[2])
-        if p[5] != None:
-            funcs_table.add_params(p[3], p[5])
-            if p[7] != None:
-                funcs_table.add_vars(p[3], p[7])
+
+def p_punto_meter_funcion(p):
+    '''
+        punto_meter_funcion : 
+    '''
+    funcs_table.add_function(p[-1], p[-2])
+    inter_code.scope = p[-1]
 
 def p_parametros_funcion(p):
     '''
         parametros_funcion : variables_funcion
             | empty
     '''
-    p[0] = p[1]
+    if p[1] != None:
+        funcs_table.add_params(inter_code.scope, p[1])
+
 
 def p_variables_funcion(p):
     '''
@@ -220,16 +219,36 @@ def p_estatutos(p):
 
 def p_asignacion(p):
     '''
-        asignacion : variable EQUAL exp SEMICOLON
+        asignacion : variable meter_variable_asignacion EQUAL punto_meter_operador exp punto_quad_asignacion SEMICOLON
     '''
+
+def p_meter_variable_asignacion(p):
+    '''
+        meter_variable_asignacion : 
+    '''
+    inter_code.p_operands.append(p[-1])
+
+def p_punto_quad_asignacion(p):
+    '''
+        punto_quad_asignacion : 
+    '''
+    print("asignacion ", inter_code.p_operands)
+    inter_code.quad_assignment()
 
 def p_variable(p):
     '''
         variable : ID
-            | ID LBRACKET exp RBRACKET
-            | ID LBRACKET exp RBRACKET LBRACKET exp RBRACKET
+            | ID LBRACKET exp RBRACKET punto_agregar_dimension 
+            | ID LBRACKET exp RBRACKET punto_agregar_dimension LBRACKET exp RBRACKET punto_agregar_dimension 
     '''
     p[0] = p[1]
+
+def p_punto_agregar_dimension(p):
+    '''
+        punto_agregar_dimension : 
+    '''
+    inter_code.p_operands.pop()
+    print(inter_code.p_operands)
 
 def p_expresion(p):
     '''
@@ -277,8 +296,8 @@ def p_punto_meter_operador(p):
 
 def p_factor(p):
     '''
-        factor : var_cte punto_meter_operandos
-            | variable punto_meter_operandos
+        factor : var_cte punto_meter_operando_constante
+            | variable punto_meter_operando
             | llamada_a_funcion
             | OPENPAREN exp CLOSEPAREN
     '''
@@ -292,11 +311,25 @@ def p_var_cte(p):
     '''
     p[0] = p[1]
 
-def p_punto_meter_operandos(p):
+def p_punto_meter_operando(p):
     '''
-        punto_meter_operandos : 
+        punto_meter_operando : 
     '''
+    var = p[-1]
+    inter_code.p_operands.append(var)
+    operand_type = funcs_table.search_type(inter_code.scope, var)
+    inter_code.p_types.append(operand_type)
+    print(inter_code.p_operands)
+
+def p_punto_meter_operando_constante(p):
+    '''
+        punto_meter_operando_constante : 
+    '''
+    print(p[-1])
     inter_code.p_operands.append(p[-1])
+    inter_code.p_types.append(type(p[-1]).__name__)
+    print(inter_code.p_operands)
+
 
 def p_condicion(p):
     '''

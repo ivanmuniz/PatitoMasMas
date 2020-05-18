@@ -1,6 +1,7 @@
 programa prueba;
-var int i1[10][10], i2[10];
+var int i1[10][10], i2[10], iNum, i;
 char c2;
+char c;
 
 funcion int fact(int i, char c)
 var int aux;
@@ -21,15 +22,15 @@ funcion void imprimir(char c)
 }
 
 principal() {
-    auxC = 'z';
+    c2 = 'z';
     si(5 >= 4 && 3 == 2)
     entonces
     {
-        auxC = 'z';
+        c2 = 'z';
     } sino {
-        auxC = "c";
+        c2 = "c";
     }
-    i = 5;
+    i2[0] = 5;
     c = fact(int i, char c);
     lee(iNum);
     escribe("jose comio ", iNum, "tacos");
