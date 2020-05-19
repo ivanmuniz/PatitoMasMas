@@ -228,7 +228,8 @@ def p_meter_variable_asignacion(p):
     '''
         meter_variable_asignacion : 
     '''
-    inter_code.p_operands.append(p[-1])
+    var_dir = funcs_table.search_var(inter_code.scope, p[-1])['dir']
+    inter_code.p_operands.append(var_dir)
 
 def p_punto_quad_asignacion(p):
     '''
@@ -280,27 +281,39 @@ def p_punto_quad_cond(p):
     '''
         punto_quad_cond : 
     '''
-    inter_code.quad_cond()
+    inter_code.quad_arit_cond()
 
 def p_exp_ar(p):
     '''
-        exp_ar : termino punto_quad_arithmetic
-            | termino punto_quad_arithmetic PLUS punto_meter_operador exp_ar
-            | termino punto_quad_arithmetic MINUS punto_meter_operador exp_ar
+        exp_ar : termino punto_quad_arithmetic_exp
+            | termino punto_quad_arithmetic_exp PLUS punto_meter_operador exp_ar
+            | termino punto_quad_arithmetic_exp MINUS punto_meter_operador exp_ar
     '''
 
 def p_termino(p):
     '''
-        termino : factor punto_quad_arithmetic
-            | factor punto_quad_arithmetic TIMES punto_meter_operador termino
-            | factor punto_quad_arithmetic DIVIDE punto_meter_operador termino
+        termino : factor punto_quad_arithmetic_term
+            | factor punto_quad_arithmetic_term TIMES punto_meter_operador termino
+            | factor punto_quad_arithmetic_term DIVIDE punto_meter_operador termino
     '''
 
-def p_punto_quad_arithmetic(p):
+def p_punto_quad_arithmetic_exp(p):
     '''
-        punto_quad_arithmetic : 
+        punto_quad_arithmetic_exp : 
     '''
-    inter_code.quad_arithmetic()
+    print(inter_code.p_operators)
+    if inter_code.p_operators != []:
+        if inter_code.p_operators[-1] in ['+', '-']:
+            inter_code.quad_arit_cond()
+
+def p_punto_quad_arithmetic_term(p):
+    '''
+        punto_quad_arithmetic_term : 
+    '''
+    print(inter_code.p_operators)
+    if inter_code.p_operators != []:
+        if inter_code.p_operators[-1] in ['*', '/']:
+            inter_code.quad_arit_cond()
 
 def p_punto_meter_operador(p):
     '''
@@ -331,18 +344,24 @@ def p_punto_meter_operando(p):
     '''
     var = p[-1]
 
-    inter_code.p_operands.append(var)
-    operand_type = funcs_table.search_type(inter_code.scope, var)
-    inter_code.p_types.append(operand_type)
+    #Obiente informacion(tipo y direccion) de la variable de la tabla de funciones
+    var_data = funcs_table.search_var(inter_code.scope, var)
+
+    #Mete a la pila de operandos la direccion de la variable
+    inter_code.p_operands.append(var_data['dir'])
+
+    #Mete a la pila de tipos el tipo de variable
+    inter_code.p_types.append(var_data['type'])
+
     print(inter_code.p_operands)
 
 def p_punto_meter_operando_constante(p):
     '''
         punto_meter_operando_constante : 
     '''
-    print(p[-1])
-    inter_code.p_operands.append(p[-1])
+    inter_code.p_operands.append(p[-1]) #Falta meterle la direccion en memoria para constantes
     inter_code.p_types.append(type(p[-1]).__name__)
+    print(inter_code.p_types)
     print(inter_code.p_operands)
 
 

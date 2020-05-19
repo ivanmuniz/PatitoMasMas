@@ -9,6 +9,6 @@ principal() {
     c = 'c';
 
     i = j + k + 8;
-    j = j + 7;
-    k = i + j;
+    j = j + 7 * 1;
+    k = i + j / 4;
 }

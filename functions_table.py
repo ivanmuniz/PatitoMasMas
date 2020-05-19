@@ -38,14 +38,14 @@ class FunctionsTable:
             self.table[function]['vars'][var_name] = {'type': var_type, 'dir': VirtualMemory().getDir(function, False, var_type)}
             self.table[function]['params'].append(var_type)
 
-    def search_type(self, scope, var):
+    def search_var(self, scope, var):
         print("TABLOTA:", self.table)
         print(var)
         print(scope)
         if var in self.table[scope]['vars']:
-            return self.table[scope]['vars'][var]['type']
+            return self.table[scope]['vars'][var]
         elif var in self.table['global']['vars']:
-            return self.table['global']['vars'][var]['type']
+            return self.table['global']['vars'][var]
         else: 
             raise TypeError("La variable no ha sido declarada")
             
