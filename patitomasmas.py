@@ -3,6 +3,7 @@ import ply.yacc as yacc
 import sys
 from functions_table import FunctionsTable
 from intermediate_code import IntermediateCode
+from virtual_memory import VirtualMemory
 
 funcs_table = FunctionsTable()
 inter_code = IntermediateCode()
@@ -166,6 +167,7 @@ def p_punto_meter_funcion(p):
     '''
     funcs_table.add_function(p[-1], p[-2])
     inter_code.scope = p[-1]
+    VirtualMemory().resetCounters()
 
 def p_parametros_funcion(p):
     '''

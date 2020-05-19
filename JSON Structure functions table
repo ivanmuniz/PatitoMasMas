@@ -1,0 +1,80 @@
+{
+    'global': {
+        'type': 'void',
+        'vars': {
+            'i1': {
+                'type': 'int',
+                'dir': 1000
+            },
+            'i2': {
+                'type': 'int',
+                'dir': 1001
+            },
+            'iNum': {
+                'type': 'int',
+                'dir': 1002
+            },
+            'i': {
+                'type': 'int',
+                'dir': 1003
+            },
+            'c2': {
+                'type': 'char',
+                'dir': 9000
+            },
+            'c': {
+                'type': 'char',
+                'dir': 9001
+            }
+        },
+        'params': [
+            
+        ]
+    },
+    'principal': {
+        'type': 'void',
+        'vars': {
+            
+        },
+        'params': [
+            
+        ]
+    },
+    'fact': {
+        'type': 'int',
+        'vars': {
+            'i': {
+                'type': 'int',
+                'dir': 21000
+            },
+            'c': {
+                'type': 'char',
+                'dir': 29000
+            },
+            'aux': {
+                'type': 'int',
+                'dir': 21001
+            },
+            'auxC': {
+                'type': 'char',
+                'dir': 29001
+            }
+        },
+        'params': [
+            'int',
+            'char'
+        ]
+    },
+    'imprimir': {
+        'type': 'void',
+        'vars': {
+            'c': {
+                'type': 'char',
+                'dir': 29000
+            }
+        },
+        'params': [
+            'char'
+        ]
+    }
+}

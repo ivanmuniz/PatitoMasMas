@@ -1,3 +1,5 @@
+from virtual_memory import VirtualMemory
+
 class FunctionsTable:
     #TODO2: crear funcion para eliminar vars de las funciones, esto se aplicara cuando termine de hacer el parseo.
     def __init__(self):
@@ -22,7 +24,7 @@ class FunctionsTable:
                     raise TypeError("La variable ya existe en el scope")
                 
                 print("AGREGANGO VAR ", var)
-                self.table[function]['vars'][var] = {'type': type_vars}
+                self.table[function]['vars'][var] = {'type': type_vars, 'dir': VirtualMemory().getDir(function, False, type_vars)}
     
     def add_function(self, function, type):
         self.table[function] = { 'type': type, 'vars': {}, 'params': [] }
@@ -33,7 +35,7 @@ class FunctionsTable:
             var_type = param_values[0]
             var_name = param_values[1]
 
-            self.table[function]['vars'][var_name] = {'type': var_type}
+            self.table[function]['vars'][var_name] = {'type': var_type, 'dir': VirtualMemory().getDir(function, False, var_type)}
             self.table[function]['params'].append(var_type)
 
     def search_type(self, scope, var):
