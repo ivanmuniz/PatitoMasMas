@@ -1,0 +1,14 @@
+programa prueba;
+var int i, j, k;
+char c;
+
+principal() {
+    i = 6;
+    j = 8;
+    k = 9;
+    c = 'c';
+
+    i = j + k + 8;
+    j = j + 7;
+    k = i + j;
+}

@@ -260,13 +260,25 @@ def p_expresion(p):
 def p_exp(p):
     '''
         exp : exp_ar
-            | exp_ar GREATERTHAN exp_ar
-            | exp_ar LESSTHAN exp_ar
-            | exp_ar GREATEROREQUAL exp_ar
-            | exp_ar LESSEROREQUAL exp_ar
-            | exp_ar CEQUAL exp_ar
-            | exp_ar NOTEQUAL exp_ar
+            | exp_ar exp_condicional punto_meter_operador exp_ar punto_quad_cond
     '''
+
+def p_exp_condicional(p):
+    '''
+        exp_condicional : GREATERTHAN
+        | LESSTHAN
+        | GREATEROREQUAL
+        | LESSEROREQUAL
+        | CEQUAL
+        | NOTEQUAL
+    '''
+    p[0] = p[1]
+
+def p_punto_quad_cond(p):
+    '''
+        punto_quad_cond : 
+    '''
+    inter_code.quad_cond()
 
 def p_exp_ar(p):
     '''
@@ -316,6 +328,7 @@ def p_punto_meter_operando(p):
         punto_meter_operando : 
     '''
     var = p[-1]
+
     inter_code.p_operands.append(var)
     operand_type = funcs_table.search_type(inter_code.scope, var)
     inter_code.p_types.append(operand_type)

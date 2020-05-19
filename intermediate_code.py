@@ -26,14 +26,16 @@ class IntermediateCode:
             left_operando = self.p_operands.pop()
             print(self.p_operands)
 
-            right_operando_type = type(right_operando).__name__
-            left_operando_type = type(left_operando).__name__
-            
-            # if self.sc.cube[operator][right_operando_type][left_operando_type] == 'err':
-            #     raise TypeError(f"unsupported operand type(s) for {operator}: '{left_operando}' and '{right_operando}'")
+            right_type = self.p_types.pop()
+            left_type = self.p_types.pop()
 
-            quad = Quadruple(operator, left_operando, right_operando, 'temp')
-            self.p_operands.append('temp')
+            result_type = self.sc.cube[operator][right_type][left_type]
+            
+            if result_type  == 'err':
+                raise TypeError(f"unsupported operand type(s) for {operator}: '{left_type}' and '{right_type}'")
+            
+            quad = Quadruple(operator, left_operando, right_operando, result_type)
+            self.p_operands.append(result_type) #meter direccion(?)
             print(self.p_operands)
             self.quadruples.append(quad)
 
@@ -52,3 +54,23 @@ class IntermediateCode:
 
         self.quadruples.append(quad)
         print(self.p_operands)
+    
+    def quad_cond(self):
+        print(self.p_operands)
+        right_operando = self.p_operands.pop()
+        left_operando = self.p_operands.pop()
+        right_type = self.p_types.pop()
+        left_type = self.p_types.pop()
+
+        print(self.p_operands)
+        operator = self.p_operators.pop()
+
+        result_type = self.sc.cube[operator][right_type][left_type]
+
+        if result_type  == 'err':
+            raise TypeError(f"unsupported operand type(s) for {operator}: '{left_type}' and '{right_type}'")
+
+        quad = Quadruple(operator, left_operando, right_operando, result_type)
+        self.p_operands.append(result_type) #meter direccion(?)
+        print(self.p_operands)
+        self.quadruples.append(quad)

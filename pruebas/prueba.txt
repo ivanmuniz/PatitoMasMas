@@ -22,13 +22,13 @@ funcion void imprimir(char c)
 }
 
 principal() {
-    c2 = 'z';
+    c2 = 'x';
     si(5 >= 4 && 3 == 2)
     entonces
     {
-        c2 = 'z';
+        c2 = 'y';
     } sino {
-        c2 = "c";
+        c2 = "z";
     }
     i2[0] = 5;
     c = fact(int i, char c);
