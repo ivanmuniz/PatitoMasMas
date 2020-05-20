@@ -85,7 +85,7 @@ class VirtualMemory(object):
             dir = BASE + self._B_FLOAT + segmento[1]
             segmento[1] += 1
             return dir
-        elif type == 'str':
+        elif type == 'char':
             dir = BASE + self._B_CHAR + segmento[2]
             segmento[2] += 1
             return dir
@@ -106,7 +106,7 @@ class VirtualMemory(object):
             dir = BASE_TEMP + self._B_FLOAT_TEMP + segmento_temp[1]
             segmento_temp[1] += 1
             return dir
-        elif type == 'str':
+        elif type == 'char':
             dir = BASE_TEMP + self._B_CHAR_TEMP + segmento_temp[2]
             segmento_temp[2] += 1
             return dir
@@ -133,9 +133,14 @@ class VirtualMemory(object):
         print("ADD CONSTANT", value, type)
         if value in self.mem_constantes.values():
             return
-        dir = self.getDir("constante", False, type)
+
         if type == 'str':
             value = value.strip('"').strip("'")
-        self.mem_constantes[dir] = value
+            if len(value) == 1:
+                type = "char"
+            else:
+                type = "str"
 
+        dir = self.getDir("constante", False, type)
+        self.mem_constantes[dir] = value
         return dir
