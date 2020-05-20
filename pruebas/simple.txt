@@ -11,4 +11,25 @@ principal() {
     i = j + k + 8;
     j = j + 7 * 1;
     k = i + j / 4;
+
+    si(5 >= 4 && 3 == 2)
+    entonces
+    {
+        j = 0;
+    }
+
+    si(j >= k)
+    entonces
+    {
+        j = 0;
+    } sino {
+        j = 1;
+    }
+
+    mientras(i < 10) haz {
+        escribe('prueba');
+        i = i + 1;
+    }
+
+    k = 1;
 }

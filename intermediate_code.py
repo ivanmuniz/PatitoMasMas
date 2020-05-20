@@ -53,3 +53,33 @@ class IntermediateCode:
 
         self.quadruples.append(quad)
         print(self.p_operands)
+    
+    def quad_statement(self):
+        exp_type = self.p_types.pop()
+        if exp_type != 'bool':
+            raise TypeError("Type Mismatch")
+        
+        result = self.p_operands.pop()
+        quad = Quadruple('GOTOF', result, None, None)
+        self.quadruples.append(quad)
+        self.p_jumps.append(len(self.quadruples) - 1)
+    
+    def end_condition(self):
+        end = self.p_jumps.pop()
+        self.quadruples[end].result = len(self.quadruples) + 1
+    
+    def quad_sino(self):
+        quad = Quadruple('GOTO', None, None, None)
+        self.quadruples.append(quad)
+        false = self.p_jumps.pop()
+        self.p_jumps.append(len(self.quadruples) - 1)
+        self.quadruples[false].result = len(self.quadruples) + 1
+
+    def end_mientras(self):
+        end = self.p_jumps.pop()
+        return_goto = self.p_jumps.pop()
+
+        quad = Quadruple('GOTO', None, None, return_goto)
+        self.quadruples.append(quad)
+
+        self.quadruples[end].result = len(self.quadruples) + 1

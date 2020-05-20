@@ -132,7 +132,9 @@ class VirtualMemory(object):
     def addConstant(self, value, type):
         print("ADD CONSTANT", value, type)
         if value in self.mem_constantes.values():
-            return
+            for dir, val in self.mem_constantes.items():
+                if val == value:
+                    return dir
 
         if type == 'str':
             value = value.strip('"').strip("'")

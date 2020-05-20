@@ -107,7 +107,10 @@ def p_programa(p):
     '''
 
     print(funcs_table.table)
-    print(inter_code.quadruples)
+    
+    for (i, quad) in enumerate(inter_code.quadruples, start=1):
+        print(i, quad)
+
     print(memory.mem_constantes)
 
     p[0] = "PROGRAM COMPILED"
@@ -258,8 +261,8 @@ def p_punto_agregar_dimension(p):
 def p_expresion(p):
     '''
         expresion : exp
-            | exp AND expresion
-            | exp OR expresion
+            | exp AND punto_meter_operador expresion punto_quad_cond
+            | exp OR punto_meter_operador expresion punto_quad_cond
     '''
 
 def p_exp(p):
@@ -362,8 +365,8 @@ def p_punto_meter_operando_constante(p):
         punto_meter_operando_constante : 
     '''
     dir_constante = memory.addConstant(p[-1], type( p[-1] ).__name__)
-    
-    inter_code.p_operands.append(dir_constante) #Falta meterle la direccion en memoria para constantes
+    print("DIR CONST: ", dir_constante)
+    inter_code.p_operands.append(dir_constante)
     inter_code.p_types.append(type(p[-1]).__name__)
     
     print(inter_code.p_operands)
@@ -371,9 +374,27 @@ def p_punto_meter_operando_constante(p):
 
 def p_condicion(p):
     '''
-        condicion : SI OPENPAREN expresion CLOSEPAREN ENTONCES bloque
-            | SI OPENPAREN expresion CLOSEPAREN ENTONCES bloque SINO bloque
+        condicion : SI OPENPAREN expresion CLOSEPAREN punto_quad_statement ENTONCES bloque punto_end_condition
+            | SI OPENPAREN expresion CLOSEPAREN punto_quad_statement ENTONCES bloque SINO punto_quad_sino bloque punto_end_condition
     '''
+
+def p_punto_quad_statement(p):
+    '''
+        punto_quad_statement :
+    '''
+    inter_code.quad_statement()
+
+def p_punto_end_condition(p):
+    '''
+        punto_end_condition : 
+    '''
+    inter_code.end_condition()
+
+def p_punto_quad_sino(p):
+    '''
+        punto_quad_sino : 
+    '''
+    inter_code.quad_sino()
 
 def p_escritura(p):
     '''
@@ -412,8 +433,20 @@ def p_rep_no_cond(p):
 
 def p_rep_cond(p):
     '''
-        rep_cond : MIENTRAS OPENPAREN exp CLOSEPAREN HAZ bloque
+        rep_cond : MIENTRAS punto_mientras OPENPAREN exp CLOSEPAREN punto_quad_statement HAZ bloque punto_end_mientras
     '''
+
+def p_punto_mientras(p):
+    '''
+        punto_mientras : 
+    '''
+    inter_code.p_jumps.append(len(inter_code.quadruples) + 1)
+
+def p_punto_end_mientras(p):
+    '''
+        punto_end_mientras : 
+    '''
+    inter_code.end_mientras()
 
 def p_llamada_a_funcion(p):
     '''
