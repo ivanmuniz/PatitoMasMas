@@ -28,6 +28,7 @@ class VirtualMemory(object):
     segmento_global_temporal = [0, 0, 0, 0]
     segmento_local = [0, 0, 0, 0]
     segmento_local_temporal = [0, 0, 0, 0]
+    segmento_constantes = [0, 0, 0, 0]
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -73,9 +74,9 @@ class VirtualMemory(object):
             return self._checkType(type, segmento)
 
     def _checkType(self, type, segmento):
-        print("LOG: checkType")
-        BASE = self._BASE_LOCAL if segmento != 'global' else self._BASE_GLOBAL
-        segmento = self.segmento_local if segmento != 'global' else self.segmento_global
+        # print("LOG: checkType")
+        BASE = self._BASE_GLOBAL if segmento == 'global' else self._BASE_CONSTATES if segmento == 'constante' else self._BASE_LOCAL
+        segmento = self.segmento_global if segmento == 'global' else self.segmento_constantes if segmento == 'constante' else self.segmento_local
         if type == 'int':
             dir = BASE + self._B_INT + segmento[0]
             segmento[0] += 1
@@ -84,7 +85,7 @@ class VirtualMemory(object):
             dir = BASE + self._B_FLOAT + segmento[1]
             segmento[1] += 1
             return dir
-        elif type == 'char':
+        elif type == 'str':
             dir = BASE + self._B_CHAR + segmento[2]
             segmento[2] += 1
             return dir
@@ -94,7 +95,7 @@ class VirtualMemory(object):
             return dir
 
     def _checkTypeTemp(self, type, segmento):
-        print("LOG: checkTypeTemp")
+        # print("LOG: checkTypeTemp")
         BASE_TEMP = self._BASE_LOCAL_TEMP if segmento != 'global' else self._BASE_GLOBAL_TEMP
         segmento_temp = self.segmento_local_temporal if segmento != 'global' else self.segmento_global_temporal
         if type == 'int':
@@ -128,3 +129,11 @@ class VirtualMemory(object):
     Por ejemplo si te encuentras un 2 y despues en otra funcion hay un 2, la direccion de memoria de ambos 2 es la misma
     '''
     # TODO: Checar como se deben de guarar las constantes e implementar la función
+    def addConstant(self, value, type):
+        print("ADD CONSTANT", value, type)
+        if value in self.mem_constantes.values():
+            return
+        dir = self.getDir("constante", False, type)
+        if type == 'str':
+            value = value.strip('"').strip("'")
+        self.mem_constantes[dir] = value

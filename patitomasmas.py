@@ -7,6 +7,7 @@ from virtual_memory import VirtualMemory
 
 funcs_table = FunctionsTable()
 inter_code = IntermediateCode()
+memory = VirtualMemory()
 
 # RESERVED WORDS
 reserved = { 
@@ -107,6 +108,7 @@ def p_programa(p):
 
     print(funcs_table.table)
     print(inter_code.quadruples)
+    print(memory.mem_constantes)
 
     p[0] = "PROGRAM COMPILED"
 
@@ -167,7 +169,7 @@ def p_punto_meter_funcion(p):
     '''
     funcs_table.add_function(p[-1], p[-2])
     inter_code.scope = p[-1]
-    VirtualMemory().resetCounters()
+    memory.resetCounters()
 
 def p_parametros_funcion(p):
     '''
@@ -361,7 +363,7 @@ def p_punto_meter_operando_constante(p):
     '''
     inter_code.p_operands.append(p[-1]) #Falta meterle la direccion en memoria para constantes
     inter_code.p_types.append(type(p[-1]).__name__)
-    print(inter_code.p_types)
+    memory.addConstant( p[-1], type( p[-1] ).__name__ )
     print(inter_code.p_operands)
 
 
