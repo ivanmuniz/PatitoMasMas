@@ -106,7 +106,7 @@ class VirtualMemory(object):
             dir = BASE_TEMP + self._B_FLOAT_TEMP + segmento_temp[1]
             segmento_temp[1] += 1
             return dir
-        elif type == 'char':
+        elif type == 'str':
             dir = BASE_TEMP + self._B_CHAR_TEMP + segmento_temp[2]
             segmento_temp[2] += 1
             return dir
@@ -137,3 +137,5 @@ class VirtualMemory(object):
         if type == 'str':
             value = value.strip('"').strip("'")
         self.mem_constantes[dir] = value
+
+        return dir

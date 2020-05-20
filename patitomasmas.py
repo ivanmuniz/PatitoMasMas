@@ -361,9 +361,11 @@ def p_punto_meter_operando_constante(p):
     '''
         punto_meter_operando_constante : 
     '''
-    inter_code.p_operands.append(p[-1]) #Falta meterle la direccion en memoria para constantes
+    dir_constante = memory.addConstant(p[-1], type( p[-1] ).__name__)
+    
+    inter_code.p_operands.append(dir_constante) #Falta meterle la direccion en memoria para constantes
     inter_code.p_types.append(type(p[-1]).__name__)
-    memory.addConstant( p[-1], type( p[-1] ).__name__ )
+    
     print(inter_code.p_operands)
 
 
