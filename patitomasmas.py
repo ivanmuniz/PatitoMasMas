@@ -15,7 +15,7 @@ reserved = {
     'var': 'VAR',
     'int': 'INT',
     'float': 'FLOAT',
-    'char': 'CHAR',
+    'string': 'STRING',
     'funcion': 'FUNCION',
     'void': 'VOID',
     'regresa': 'REGRESA',
@@ -40,7 +40,7 @@ tokens = [
     'EQUAL', 'GREATERTHAN', 'LESSTHAN', 'NOTEQUAL', 
     'CEQUAL', 'GREATEROREQUAL', 'LESSEROREQUAL',
     'AND', 'OR','CTEI', 'CTEF', 'CTESTRING', 
-    'CTECHAR', 'LBRACKET', 'RBRACKET'
+    'LBRACKET', 'RBRACKET'
 ] + list(reserved.values())
 
 t_MINUS = r'\-'
@@ -84,14 +84,9 @@ def t_CTEI(t):
     t.value = int(t.value)
     return t
 
-def t_CTECHAR(t):
-    r'\'[\w]\'|"[\w]"'
-    return t
-
 def t_CTESTRING(t):
     r'"[\w\d\s\,. ]*"|\'[\w\d\s\,. ]*\''
     return t
-
 
 def t_ID(t):
     r'[a-zA-Z][a-zA-Z_\d]*'
@@ -103,7 +98,7 @@ lexer = lex.lex()
 
 def p_programa(p):
     '''
-        programa : PROGRAMA ID SEMICOLON declaraciones funciones PRINCIPAL OPENPAREN CLOSEPAREN bloque
+        programa : PROGRAMA ID SEMICOLON declaraciones funciones PRINCIPAL punto_principal OPENPAREN CLOSEPAREN bloque
     '''
 
     print(funcs_table.table)
@@ -114,6 +109,12 @@ def p_programa(p):
     print(memory.mem_constantes)
 
     p[0] = "PROGRAM COMPILED"
+
+def p_punto_principal(p):
+    '''
+        punto_principal : 
+    '''
+    inter_code.quadruples[0].result = len(inter_code.quadruples) + 1
 
 # ----------------------- Declaración de variables ----------------------------------
 def p_declaraciones(p):
@@ -153,7 +154,7 @@ def p_tipo(p):
     '''
         tipo : INT
             | FLOAT
-            | CHAR
+            | STRING
     '''
     p[0] = p[1]
 # ------------------------ Termina declaración de variables -------------------------
@@ -162,9 +163,16 @@ def p_tipo(p):
 # ------------------------------------ Funciones ------------------------------------
 def p_funciones(p):
     '''
-        funciones : FUNCION retorno ID punto_meter_funcion OPENPAREN parametros_funcion CLOSEPAREN declaraciones bloque funciones
+        funciones : FUNCION retorno ID punto_meter_funcion OPENPAREN parametros_funcion CLOSEPAREN declaraciones bloque punto_end_func funciones
             | empty     
     '''
+
+def p_punto_end_func(p):
+    '''
+        punto_end_func : 
+    '''
+    funcs_table.table[inter_code.scope]['quad_no'] = len(inter_code.quadruples) + 1
+    inter_code.end_func_quad()
 
 def p_punto_meter_funcion(p):
     '''
@@ -331,15 +339,31 @@ def p_factor(p):
         factor : var_cte punto_meter_operando_constante
             | variable punto_meter_operando
             | llamada_a_funcion
-            | OPENPAREN exp CLOSEPAREN
+            | OPENPAREN punto_meter_fondo exp CLOSEPAREN punto_sacar_fondo
     '''
     p[0] = p[1]
+
+
+def p_punto_meter_fondo(p):
+    '''
+        punto_meter_fondo : 
+    '''
+    inter_code.p_operators.append('(')
+
+def p_punto_sacar_fondo(p):
+    '''
+        punto_sacar_fondo : 
+    '''
+    fondo = inter_code.p_operators.pop()
+    if fondo != '(':
+        raise TypeError('No hay fondo')
+
 
 def p_var_cte(p):
     '''
         var_cte : CTEI
             | CTEF
-            | CTECHAR
+            | CTESTRING
     '''
     p[0] = p[1]
 
@@ -400,15 +424,19 @@ def p_escritura(p):
     '''
         escritura : ESCRIBE OPENPAREN escrituraprime CLOSEPAREN SEMICOLON
     '''
+    inter_code.escribe_quad()
+    
 
 def p_escrituraprime(p):
     '''
-        escrituraprime : expresion
+        escrituraprime :
+            | CTESTRING punto_meter_operando_constante
+            | CTESTRING punto_meter_operando_constante COMMA escrituraprime
             | expresion COMMA escrituraprime
-            | CTESTRING
-            | CTESTRING COMMA escrituraprime
+            | expresion
 
     '''
+    inter_code.p_operators.append("ESCRIBE")
 
 def p_retorno_de_funcion(p):
     '''
@@ -425,6 +453,8 @@ def p_lecturaprime(p):
         lecturaprime : variable
             | variable COMMA lecturaprime
     '''
+    inter_code.leer_quad(p[1])
+    
 
 def p_rep_no_cond(p):
     '''

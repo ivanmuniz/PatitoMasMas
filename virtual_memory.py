@@ -15,13 +15,13 @@ class VirtualMemory(object):
     # Desplazamiento por tipo de dato VARIABLE
     _B_INT = 0
     _B_FLOAT = 4000
-    _B_CHAR = 8000
+    _B_STRING = 8000
     _B_BOOL = 12000
 
     # Desplazamiento por tipo de dato TEMPORAL
     _B_INT_TEMP = 0
     _B_FLOAT_TEMP = 1000
-    _B_CHAR_TEMP = 2000
+    _B_STRING_TEMP = 2000
     _B_BOOL_TEMP = 3000
 
     segmento_global = [0, 0, 0 ,0]
@@ -40,30 +40,30 @@ class VirtualMemory(object):
         GLOBAL (Variables)
             int     [1000  -  4999]
             float   [5000  -  8999]
-            chars   [9000  - 12999]
+            string  [9000  - 12999]
             bool    [13000 - 16999]
         TEMPORAL
             int     [17000 - 17999]
             float   [18000 - 18999]
-            chars   [19000 - 19999]
+            string  [19000 - 19999]
             bool    [20000 - 20999]
 
     SEGMENTO LOCAL
         LOCAL (Variables)
             int     [21000 - 24999]
             float   [25000 - 28999]
-            chars   [29000 - 32999]
+            string  [29000 - 32999]
             bool    [33000 - 36999]
         TEMPORAL
             int     [37000 - 37999]
             float   [38000 - 38999]
-            chars   [39000 - 39999]
+            string  [39000 - 39999]
             bool    [40000 - 40999]
 
     SEGMENTO CONSTANTES
             int     [41000 - 42999]
             float   [43000 - 44999]
-            chars   [45000 - 46999]
+            string  [45000 - 46999]
             bool    [47000 - 48999] 
     '''
 
@@ -85,8 +85,8 @@ class VirtualMemory(object):
             dir = BASE + self._B_FLOAT + segmento[1]
             segmento[1] += 1
             return dir
-        elif type == 'char':
-            dir = BASE + self._B_CHAR + segmento[2]
+        elif type == 'str':
+            dir = BASE + self._B_STRING + segmento[2]
             segmento[2] += 1
             return dir
         elif type == 'bool':
@@ -106,8 +106,8 @@ class VirtualMemory(object):
             dir = BASE_TEMP + self._B_FLOAT_TEMP + segmento_temp[1]
             segmento_temp[1] += 1
             return dir
-        elif type == 'char':
-            dir = BASE_TEMP + self._B_CHAR_TEMP + segmento_temp[2]
+        elif type == 'str':
+            dir = BASE_TEMP + self._B_STRING_TEMP + segmento_temp[2]
             segmento_temp[2] += 1
             return dir
         elif type == 'bool':
@@ -138,10 +138,6 @@ class VirtualMemory(object):
 
         if type == 'str':
             value = value.strip('"').strip("'")
-            if len(value) == 1:
-                type = "char"
-            else:
-                type = "str"
 
         dir = self.getDir("constante", False, type)
         self.mem_constantes[dir] = value

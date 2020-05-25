@@ -8,7 +8,7 @@ class IntermediateCode:
         self.p_operands = []
         self.p_types = []
         self.p_jumps = []
-        self.quadruples = []
+        self.quadruples = [Quadruple('GOTO', None, None, None)]
         self.sc = SemanticCube()
         self.scope = 'global'
         self.cont_temp = 0
@@ -83,3 +83,19 @@ class IntermediateCode:
         self.quadruples.append(quad)
 
         self.quadruples[end].result = len(self.quadruples) + 1
+    
+    def end_func_quad(self):
+        quad = Quadruple('ENDFUNC', None, None, None)
+        self.quadruples.append(quad)
+    
+    def escribe_quad(self):
+        while('ESCRIBE' in self.p_operators):
+            result = self.p_operands.pop() 
+            operator = self.p_operators.pop()
+            quad = Quadruple(operator, None, None, result)
+
+            self.quadruples.append(quad)
+
+    def leer_quad(self, var):
+        quad = Quadruple('LEER', None, None, var)
+        self.quadruples.append(quad)
