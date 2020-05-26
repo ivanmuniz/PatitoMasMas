@@ -163,15 +163,20 @@ def p_tipo(p):
 # ------------------------------------ Funciones ------------------------------------
 def p_funciones(p):
     '''
-        funciones : FUNCION retorno ID punto_meter_funcion OPENPAREN parametros_funcion CLOSEPAREN declaraciones bloque punto_end_func funciones
+        funciones : FUNCION retorno ID punto_meter_funcion OPENPAREN parametros_funcion CLOSEPAREN declaraciones punto_func_quad bloque punto_end_func funciones
             | empty     
     '''
+
+def p_punto_func_quad(p):
+    '''
+        punto_func_quad : 
+    '''
+    funcs_table.table[inter_code.scope]['quad_no'] = len(inter_code.quadruples) + 1
 
 def p_punto_end_func(p):
     '''
         punto_end_func : 
     '''
-    funcs_table.table[inter_code.scope]['quad_no'] = len(inter_code.quadruples) + 1
     inter_code.end_func_quad()
 
 def p_punto_meter_funcion(p):
@@ -458,7 +463,12 @@ def p_lecturaprime(p):
 
 def p_rep_no_cond(p):
     '''
-        rep_no_cond : DESDE variable EQUAL exp HASTA exp HACER bloque
+        rep_no_cond : DESDE variable punto_meter_operando EQUAL punto_meter_operador exp punto_verifica_desde punto_quad_asignacion HASTA exp punto_verifica_desde HACER bloque
+    '''
+
+def p_punto_verifica_desde(p):
+    '''
+        punto_verifica_desde : 
     '''
 
 def p_rep_cond(p):
@@ -480,9 +490,22 @@ def p_punto_end_mientras(p):
 
 def p_llamada_a_funcion(p):
     '''
-        llamada_a_funcion : ID OPENPAREN CLOSEPAREN
-            | ID OPENPAREN argumentos_funcion CLOSEPAREN
+        llamada_a_funcion : ID punto_verify_func OPENPAREN punto_era_quad CLOSEPAREN
+            | ID punto_verify_func OPENPAREN punto_era_quad argumentos_funcion CLOSEPAREN
     '''
+
+def p_punto_era_quad(p):
+    '''
+        punto_era_quad : 
+    '''
+    inter_code.era_quad()
+
+def p_punto_verify_func(p):
+    '''
+        punto_verify_func : 
+    '''
+    if p[-1] not in funcs_table.table:
+        raise TypeError("No existe la funcion")
 
 def p_argumentos_funcion(p):
     '''

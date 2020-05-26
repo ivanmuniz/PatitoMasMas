@@ -38,6 +38,10 @@ principal() {
         escribe(i);
     }
 
+    desde i=1 hasta i==10 hacer {
+        escribe("prueba");
+    }
+
     lee(precio, i);
 
     k = 1;

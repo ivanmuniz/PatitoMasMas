@@ -99,3 +99,7 @@ class IntermediateCode:
     def leer_quad(self, var):
         quad = Quadruple('LEER', None, None, var)
         self.quadruples.append(quad)
+    
+    def era_quad(self):
+        quad = Quadruple('ERA', None, None, self.scope)
+        self.quadruples.append(quad)
