@@ -16,7 +16,7 @@ class FunctionsTable:
             vars_n_type = vars.strip().split(' ')
             type_vars = vars_n_type[0] 
             if type_vars == "string": 
-                type_vars = "str";
+                type_vars = "str"
             for var in vars_n_type[1].split(','):
                 if '[' in var:
                     var = var[:var.find('[')] #esto quita las dimensiones *POR MIENTRAS, CREO QUE DEBEMOS DE GUARDARLAS
@@ -25,7 +25,6 @@ class FunctionsTable:
                     raise TypeError("La variable ya existe en el scope")
                 
 
-                print("AGREGANGO VAR ", var)
                 self.table[function]['vars'][var] = {'type': type_vars, 'dir': VirtualMemory().getDir(function, False, type_vars)}
     
     def add_function(self, function, type):
@@ -38,15 +37,12 @@ class FunctionsTable:
             var_name = param_values[1]
 
             if var_type == "string": 
-                var_type = "str";
+                var_type = "str"
 
             self.table[function]['vars'][var_name] = {'type': var_type, 'dir': VirtualMemory().getDir(function, False, var_type)}
             self.table[function]['params'].append(var_type)
 
     def search_var(self, scope, var):
-        print("TABLOTA:", self.table)
-        print(var)
-        print(scope)
         if var in self.table[scope]['vars']:
             return self.table[scope]['vars'][var]
         elif var in self.table['global']['vars']:

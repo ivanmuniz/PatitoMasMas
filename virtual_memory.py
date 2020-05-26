@@ -74,7 +74,6 @@ class VirtualMemory(object):
             return self._checkType(type, segmento)
 
     def _checkType(self, type, segmento):
-        # print("LOG: checkType")
         BASE = self._BASE_GLOBAL if segmento == 'global' else self._BASE_CONSTANTES if segmento == 'constante' else self._BASE_LOCAL
         segmento = self.segmento_global if segmento == 'global' else self.segmento_constantes if segmento == 'constante' else self.segmento_local
         if type == 'int':
@@ -95,7 +94,6 @@ class VirtualMemory(object):
             return dir
 
     def _checkTypeTemp(self, type, segmento):
-        # print("LOG: checkTypeTemp")
         BASE_TEMP = self._BASE_LOCAL_TEMP if segmento != 'global' else self._BASE_GLOBAL_TEMP
         segmento_temp = self.segmento_local_temporal if segmento != 'global' else self.segmento_global_temporal
         if type == 'int':
@@ -130,7 +128,6 @@ class VirtualMemory(object):
     '''
     # TODO: Checar como se deben de guarar las constantes e implementar la función
     def addConstant(self, value, type):
-        print("ADD CONSTANT", value, type)
         if value in self.mem_constantes.values():
             for dir, val in self.mem_constantes.items():
                 if val == value:
