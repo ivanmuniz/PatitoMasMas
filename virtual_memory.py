@@ -7,10 +7,10 @@ class VirtualMemory(object):
 
     # Bases donde inician las memorias
     _BASE_GLOBAL = 1000
-    _BASE_GLOBAL_TEMP = 1700
+    _BASE_GLOBAL_TEMP = 17000
     _BASE_LOCAL = 21000
     _BASE_LOCAL_TEMP = 37000
-    _BASE_CONSTATES = 41000
+    _BASE_CONSTANTES = 41000
 
     # Desplazamiento por tipo de dato VARIABLE
     _B_INT = 0
@@ -75,7 +75,7 @@ class VirtualMemory(object):
 
     def _checkType(self, type, segmento):
         # print("LOG: checkType")
-        BASE = self._BASE_GLOBAL if segmento == 'global' else self._BASE_CONSTATES if segmento == 'constante' else self._BASE_LOCAL
+        BASE = self._BASE_GLOBAL if segmento == 'global' else self._BASE_CONSTANTES if segmento == 'constante' else self._BASE_LOCAL
         segmento = self.segmento_global if segmento == 'global' else self.segmento_constantes if segmento == 'constante' else self.segmento_local
         if type == 'int':
             dir = BASE + self._B_INT + segmento[0]
