@@ -486,8 +486,8 @@ def p_llamada_a_funcion(p):
 
 def p_argumentos_funcion(p):
     '''
-        argumentos_funcion : tipo ID
-            |   tipo ID COMMA argumentos_funcion
+        argumentos_funcion : expresion
+            |   expresion COMMA argumentos_funcion
     '''
 
 def p_llamada_a_funcion_void(p):
