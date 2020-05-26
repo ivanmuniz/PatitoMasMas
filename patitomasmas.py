@@ -253,7 +253,6 @@ def p_punto_quad_asignacion(p):
     '''
         punto_quad_asignacion : 
     '''
-    print("asignacion ", inter_code.p_operands)
     inter_code.quad_assignment()
 
 def p_variable(p):
@@ -269,7 +268,6 @@ def p_punto_agregar_dimension(p):
         punto_agregar_dimension : 
     '''
     inter_code.p_operands.pop()
-    print(inter_code.p_operands)
 
 def p_expresion(p):
     '''
@@ -319,7 +317,6 @@ def p_punto_quad_arithmetic_exp(p):
     '''
         punto_quad_arithmetic_exp : 
     '''
-    print(inter_code.p_operators)
     if inter_code.p_operators != []:
         if inter_code.p_operators[-1] in ['+', '-']:
             inter_code.quad_arit_cond()
@@ -328,7 +325,6 @@ def p_punto_quad_arithmetic_term(p):
     '''
         punto_quad_arithmetic_term : 
     '''
-    print(inter_code.p_operators)
     if inter_code.p_operators != []:
         if inter_code.p_operators[-1] in ['*', '/']:
             inter_code.quad_arit_cond()
@@ -387,18 +383,14 @@ def p_punto_meter_operando(p):
     #Mete a la pila de tipos el tipo de variable
     inter_code.p_types.append(var_data['type'])
 
-    print(inter_code.p_operands)
 
 def p_punto_meter_operando_constante(p):
     '''
         punto_meter_operando_constante : 
     '''
     dir_constante = memory.addConstant(p[-1], type( p[-1] ).__name__)
-    print("DIR CONST: ", dir_constante)
     inter_code.p_operands.append(dir_constante)
     inter_code.p_types.append(type(p[-1]).__name__)
-    
-    print(inter_code.p_operands)
 
 
 def p_condicion(p):

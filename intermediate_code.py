@@ -20,9 +20,7 @@ class IntermediateCode:
     def quad_arit_cond(self):
         operator = self.p_operators.pop()
         right_operando = self.p_operands.pop()
-        print(self.p_operands)
         left_operando = self.p_operands.pop()
-        print(self.p_operands)
 
         right_type = self.p_types.pop()
         left_type = self.p_types.pop()
@@ -38,21 +36,16 @@ class IntermediateCode:
 
         self.p_operands.append(result)
         self.p_types.append(result_type)
-        print(self.p_operands)
         self.quadruples.append(quad)
 
     def quad_assignment(self):
-        print("entre perro")
         operator = self.p_operators.pop()
         right_operando = self.p_operands.pop()
-        print(self.p_operands)
         left_operando = self.p_operands.pop()
-        print(self.p_operands)
         
         quad = Quadruple(operator, right_operando, None, left_operando )
 
         self.quadruples.append(quad)
-        print(self.p_operands)
     
     def quad_statement(self):
         exp_type = self.p_types.pop()
