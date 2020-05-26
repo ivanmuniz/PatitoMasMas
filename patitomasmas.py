@@ -455,13 +455,36 @@ def p_lecturaprime(p):
 
 def p_rep_no_cond(p):
     '''
-        rep_no_cond : DESDE variable punto_meter_operando EQUAL punto_meter_operador exp punto_verifica_desde punto_quad_asignacion HASTA exp punto_verifica_desde HACER bloque
+        rep_no_cond : DESDE variable punto_meter_operando EQUAL punto_meter_operador exp punto_quad_asignacion punto_meter_desde_var HASTA exp punto_desde_gotov HACER bloque punto_desde_incremento
     '''
 
-def p_punto_verifica_desde(p):
+def p_punto_desde_incremento(p):
     '''
-        punto_verifica_desde : 
+        punto_desde_incremento : 
     '''
+    inter_code.desde_incremento_quad()
+    inter_code.end_mientras()
+
+def p_punto_desde_gotov(p):
+    '''
+        punto_desde_gotov : 
+    '''
+    inter_code.quad_gotov()
+
+def p_punto_meter_desde_var(p):
+    '''
+        punto_meter_desde_var : 
+    '''
+    #Obiente informacion(tipo y direccion) de la variable de la tabla de funciones
+    var_data = funcs_table.search_var(inter_code.scope, p[-6])
+
+    #Mete a la pila de operandos la direccion de la variable
+
+    if var_data['type'] != 'int':
+        raise TypeError('La variable tiene que ser entera para usar el DESDE')
+
+    inter_code.p_operands.append(var_data['dir'])
+    inter_code.p_jumps.append(len(inter_code.quadruples) + 1)
 
 def p_rep_cond(p):
     '''

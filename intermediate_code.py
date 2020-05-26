@@ -96,3 +96,24 @@ class IntermediateCode:
     def era_quad(self):
         quad = Quadruple('ERA', None, None, self.scope)
         self.quadruples.append(quad)
+    
+    def desde_incremento_quad(self):
+        var = self.p_operands.pop()
+        
+        constant_dir = VirtualMemory().addConstant(1, 'int')
+
+        result = VirtualMemory().getDir(self.scope, True, 'int')
+        quad = Quadruple('+', var, constant_dir , result)
+        self.quadruples.append(quad)
+        quad = Quadruple('=', result, None, var)
+        self.quadruples.append(quad)
+    
+    def quad_gotov(self):
+        exp_type = self.p_types.pop()
+        if exp_type != 'bool':
+            raise TypeError("Type Mismatch")
+        
+        result = self.p_operands.pop()
+        quad = Quadruple('GOTOV', result, None, None)
+        self.quadruples.append(quad)
+        self.p_jumps.append(len(self.quadruples) - 1)
