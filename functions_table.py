@@ -18,14 +18,26 @@ class FunctionsTable:
             if type_vars == "string": 
                 type_vars = "str"
             for var in vars_n_type[1].split(','):
+                is_array = False
+                dimensions = ''
                 if '[' in var:
-                    var = var[:var.find('[')] #esto quita las dimensiones *POR MIENTRAS, CREO QUE DEBEMOS DE GUARDARLAS
+                    is_array = True
+                    dimensions = var[var.find('['):]
+                    var = var[:var.find('[')]
                     
                 if var in self.table[function]['vars']:
                     raise TypeError("La variable ya existe en el scope")
                 
+                var_dims_n_size = self.get_dimensions(is_array, dimensions)
 
-                self.table[function]['vars'][var] = {'type': type_vars, 'dir': VirtualMemory().getDir(function, False, type_vars)}
+                var_dir = VirtualMemory().getDir(function, False, type_vars, var_dims_n_size[1])
+
+                self.table[function]['vars'][var] = {
+                    'type': type_vars, 
+                    'dir': var_dir, 
+                    'is_array': is_array,
+                    'dimensions': var_dims_n_size[0]
+                }
     
     def add_function(self, function, type):
         self.table[function] = { 'type': type, 'vars': {}, 'params': [], 'quad_no': None }
@@ -49,4 +61,33 @@ class FunctionsTable:
             return self.table['global']['vars'][var]
         else: 
             raise TypeError("La variable no ha sido declarada")
+
+    def get_dimensions(self, is_array, dimensions):
+        if is_array:
+            dim = 0
+            r = 1
+            var_dims = []
+            number = ''
+
+            for c in dimensions:
+                if c == '[':
+                    node = {'dims': None, 'mdim': None}
+                elif c == ']':
+                    dim += 1
+                    node['dims'] = int(number)
+                    number = ''
+                    var_dims.append(node)
+                    r = node['dims'] * r 
+                else:
+                    number = number + c
+
+            size = r                      
+            for i in range(dim):
+                mdim = int(r/(var_dims[i]['dims']))
+                var_dims[i]['mdim'] = mdim
+                r = mdim
             
+            var_dims[-1]['mdim'] = 0
+            return (var_dims, size)
+        else:
+            return (None, 1)

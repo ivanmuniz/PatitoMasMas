@@ -67,30 +67,30 @@ class VirtualMemory(object):
             bool    [47000 - 48999] 
     '''
 
-    def getDir(self, segmento, temp, type):
+    def getDir(self, segmento, temp, type, size=1):
         if temp:
             return self._checkTypeTemp(type, segmento)
         else:
-            return self._checkType(type, segmento)
+            return self._checkType(type, segmento, size)
 
-    def _checkType(self, type, segmento):
+    def _checkType(self, type, segmento, size):
         BASE = self._BASE_GLOBAL if segmento == 'global' else self._BASE_CONSTANTES if segmento == 'constante' else self._BASE_LOCAL
         segmento = self.segmento_global if segmento == 'global' else self.segmento_constantes if segmento == 'constante' else self.segmento_local
         if type == 'int':
             dir = BASE + self._B_INT + segmento[0]
-            segmento[0] += 1
+            segmento[0] += size
             return dir
         elif type == 'float':
             dir = BASE + self._B_FLOAT + segmento[1]
-            segmento[1] += 1
+            segmento[1] += size
             return dir
         elif type == 'str':
             dir = BASE + self._B_STRING + segmento[2]
-            segmento[2] += 1
+            segmento[2] += size
             return dir
         elif type == 'bool':
             dir = BASE + self._B_BOOL + segmento[3]
-            segmento[3] += 1
+            segmento[3] += size
             return dir
 
     def _checkTypeTemp(self, type, segmento):

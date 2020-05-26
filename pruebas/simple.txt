@@ -1,5 +1,5 @@
 programa prueba;
-var int i, j, k;
+var int a[10][10], i, j, k;
 float precio;
 string c;
 
