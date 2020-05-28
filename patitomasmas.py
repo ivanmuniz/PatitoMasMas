@@ -569,15 +569,40 @@ def p_punto_end_mientras(p):
 
 def p_llamada_a_funcion(p):
     '''
-        llamada_a_funcion : ID punto_verify_func OPENPAREN punto_era_quad CLOSEPAREN
-            | ID punto_verify_func OPENPAREN punto_era_quad argumentos_funcion CLOSEPAREN
+        llamada_a_funcion : ID punto_verify_func OPENPAREN punto_era_quad CLOSEPAREN punto_gosub_quad_1
+            | ID punto_verify_func OPENPAREN punto_era_quad argumentos_funcion punto_verify_more_params CLOSEPAREN punto_gosub_quad_2
     '''
+
+def p_punto_gosub_quad_1(p):
+    '''
+        punto_gosub_quad_1 : 
+    '''
+    quad_func = funcs_table.table[p[-5]]['quad_no']
+    inter_code.quad_gosub(quad_func)
+
+def p_punto_gosub_quad_2(p):
+    '''
+        punto_gosub_quad_2 : 
+    '''
+    quad_func = funcs_table.table[p[-7]]['quad_no']
+    inter_code.quad_gosub(quad_func)
+
+def p_punto_verify_more_params(p):
+    '''
+        punto_verify_more_params : 
+    '''
+    if len(funcs_table.table[p[-5]]['params']) != (inter_code.cont_param+1):
+        raise TypeError("Se necesitan mas argumentos")
+
 
 def p_punto_era_quad(p):
     '''
         punto_era_quad : 
     '''
-    inter_code.era_quad()
+    func_data = funcs_table.table[p[-3]]
+    total_vars = len(func_data['vars'].keys())
+
+    inter_code.era_quad(total_vars)
 
 def p_punto_verify_func(p):
     '''
@@ -588,9 +613,22 @@ def p_punto_verify_func(p):
 
 def p_argumentos_funcion(p):
     '''
-        argumentos_funcion : expresion
-            |   expresion COMMA argumentos_funcion
+        argumentos_funcion : expresion punto_param
+            |   expresion punto_param COMMA punto_increment_cont_param argumentos_funcion
     '''
+
+def p_punto_increment_cont_param(p):
+    '''
+        punto_increment_cont_param : 
+    '''
+    inter_code.cont_param += 1
+
+def p_punto_param(p):
+    '''
+        punto_param : 
+    '''
+    arg_func_type = funcs_table.table[inter_code.scope]['params'][inter_code.cont_param]
+    inter_code.quad_param(arg_func_type)
 
 def p_llamada_a_funcion_void(p):
     '''

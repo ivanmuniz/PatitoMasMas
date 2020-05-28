@@ -14,6 +14,7 @@ class IntermediateCode:
         self.cont_temp = 0
         self.p_dim = {}
         self.cont_dim = 0
+        self.cont_param = 0
     
     def push_operator(self, operator):
         self.p_operators.append(operator)
@@ -95,8 +96,8 @@ class IntermediateCode:
         quad = Quadruple('LEER', None, None, var)
         self.quadruples.append(quad)
     
-    def era_quad(self):
-        quad = Quadruple('ERA', None, None, self.scope)
+    def era_quad(self, size):
+        quad = Quadruple('ERA', None, None, size)
         self.quadruples.append(quad)
     
     def desde_incremento_quad(self):
@@ -150,6 +151,23 @@ class IntermediateCode:
         self.p_operands.append(result)
 
         self.p_operators.pop()
+    
+    def quad_param(self, arg_func_type):
+        argument = self.p_operands.pop()
+        argument_type = self.p_types.pop()
+
+        if argument_type != arg_func_type:
+            raise TypeError("El tipo de argumento no es igual tipo del parametro")
+            
+        quad = Quadruple('PARAM', argument, None, self.cont_param+1)
+
+        self.quadruples.append(quad)
+    
+    def quad_gosub(self, quad_func):
+        quad = Quadruple('GOSUB', None, None, quad_func)
+        self.quadruples.append(quad)
+
+        
 
             
 

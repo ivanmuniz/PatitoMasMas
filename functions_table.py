@@ -60,7 +60,7 @@ class FunctionsTable:
         elif var in self.table['global']['vars']:
             return self.table['global']['vars'][var]
         else: 
-            raise TypeError("La variable no ha sido declarada")
+            raise TypeError(f"La variable {var} no ha sido declarada")
 
     def get_dimensions(self, is_array, dimensions):
         if is_array:

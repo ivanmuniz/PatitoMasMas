@@ -1,23 +1,21 @@
 programa prueba;
 var int i, j, k;
 float precio;
-string c;
 
-funcion void imprimir(string c)
+funcion void imprimir(string s, int i)
 {
-    escribe(c);
+    escribe(s, i);
 }
 
 principal() {
     i = 6;
     j = 8;
     k = 9;
-    c = 'c';
 
     i = j + k + -8 - (2 * 3);
     j = j + 7 * 1;
     k = i + j / 4;
-    imprimir("string");
+    imprimir("hola mundo", 2020);
     si(5 >= 4 && 3 == 2)
     entonces
     {
@@ -33,7 +31,7 @@ principal() {
     }
 
     mientras(i < 10) haz {
-        escribe('prueba', 'putitas', c);
+        escribe('prueba', 'putitas');
         i = i + 1;
         escribe(i);
     }
