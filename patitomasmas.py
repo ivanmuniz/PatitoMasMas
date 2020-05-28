@@ -100,13 +100,14 @@ def p_programa(p):
     '''
         programa : PROGRAMA ID SEMICOLON declaraciones funciones PRINCIPAL punto_principal OPENPAREN CLOSEPAREN bloque
     '''
-
+    funcs_table.table['global']['vars'] = {}
     print(funcs_table.table)
     
     for (i, quad) in enumerate(inter_code.quadruples, start=1):
         print(i, quad)
 
     print(memory.mem_constantes)
+
 
     p[0] = "PROGRAM COMPILED"
 
@@ -178,6 +179,7 @@ def p_punto_end_func(p):
         punto_end_func : 
     '''
     inter_code.end_func_quad()
+    funcs_table.table[p[-8]]['vars'] = {}
 
 def p_punto_meter_funcion(p):
     '''
