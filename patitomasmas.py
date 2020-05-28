@@ -246,7 +246,6 @@ def p_punto_quad_asignacion(p):
     '''
         punto_quad_asignacion : 
     '''
-    print("ASIGNACION:", inter_code.p_operands)
     inter_code.quad_assignment()
 
 def p_variable(p):
@@ -275,7 +274,6 @@ def p_punto_end_matrz_acceso(p):
     var_data = funcs_table.search_var(inter_code.scope, var) 
     inter_code.quad_end_array_access(var_data['dir'])
     inter_code.p_operators.pop()
-    print("SE ACABA ACCESO MATRIZ CON OPERANDS, ", inter_code.p_operands)
 
 def p_punto_arr_1(p):
     '''
@@ -315,7 +313,6 @@ def p_punto_verif_index_quad_1(p):
     '''
         punto_verif_index_quad_1 : 
     '''
-    print(f"Estoy en verif quad 1 dim: {inter_code.cont_dim}")
     var = p[-5]
     var_data = funcs_table.search_var(inter_code.scope, var)
     inter_code.quad_verify_index(var_data['dimensions'], 0)
@@ -324,7 +321,6 @@ def p_punto_verif_index_quad_2(p):
     '''
         punto_verif_index_quad_2 : 
     '''
-    print(f"Estoy en verif quad 2 dim: {inter_code.cont_dim}")
     var = p[-11]
     var_data = funcs_table.search_var(inter_code.scope, var)
     inter_code.quad_verify_index(var_data['dimensions'], 1)
