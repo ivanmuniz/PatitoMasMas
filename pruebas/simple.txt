@@ -1,5 +1,5 @@
 programa prueba;
-var int a[10][10], i, j, k;
+var int i, j, k;
 float precio;
 string c;
 
@@ -41,8 +41,4 @@ principal() {
     desde i=1 hasta i==10 hacer {
         escribe("prueba");
     }
-
-    lee(precio, i);
-
-    k = 1;
 }

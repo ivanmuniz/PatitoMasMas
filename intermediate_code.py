@@ -12,6 +12,8 @@ class IntermediateCode:
         self.sc = SemanticCube()
         self.scope = 'global'
         self.cont_temp = 0
+        self.p_dim = {}
+        self.cont_dim = 0
     
     def push_operator(self, operator):
         self.p_operators.append(operator)
@@ -117,3 +119,39 @@ class IntermediateCode:
         quad = Quadruple('GOTOV', result, None, None)
         self.quadruples.append(quad)
         self.p_jumps.append(len(self.quadruples) - 1)
+
+    def quad_verify_index(self, var_dimensions, dim):
+        
+        quad = Quadruple('VERIF', self.p_operands[-1], None, var_dimensions[dim]['dims'])
+        self.quadruples.append(quad)
+
+        if len(var_dimensions) == 2 and dim == 0:
+            aux = self.p_operands.pop()
+            result = VirtualMemory().getDir(self.scope, True, 'int')
+            quad = Quadruple('*', aux, var_dimensions[dim]['mdim'], result)
+            self.quadruples.append(quad)
+            self.p_operands.append(result)
+
+        if dim > 0:
+            aux2 = self.p_operands.pop()
+            aux1 = self.p_operands.pop()
+            result = VirtualMemory().getDir(self.scope, True, 'int')
+            quad = Quadruple('+', aux1, aux2, result)
+            self.quadruples.append(quad)
+            self.p_operands.append(result)
+        
+    def quad_end_array_access(self, address):
+        aux1 = self.p_operands.pop()
+        result = VirtualMemory().getDir(self.scope, True, 'int')
+        result = '('+str(result)+')'
+        quad = Quadruple('+', aux1, address, result)
+        self.quadruples.append(quad)
+
+        self.p_operands.append(result)
+
+        self.p_operators.pop()
+
+            
+
+
+

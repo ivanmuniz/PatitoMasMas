@@ -239,35 +239,102 @@ def p_estatutos(p):
 
 def p_asignacion(p):
     '''
-        asignacion : variable meter_variable_asignacion EQUAL punto_meter_operador exp punto_quad_asignacion SEMICOLON
+        asignacion : variable EQUAL punto_meter_operador exp punto_quad_asignacion SEMICOLON
     '''
-
-def p_meter_variable_asignacion(p):
-    '''
-        meter_variable_asignacion : 
-    '''
-    var_dir = funcs_table.search_var(inter_code.scope, p[-1])['dir']
-    inter_code.p_operands.append(var_dir)
 
 def p_punto_quad_asignacion(p):
     '''
         punto_quad_asignacion : 
     '''
+    print("ASIGNACION:", inter_code.p_operands)
     inter_code.quad_assignment()
 
 def p_variable(p):
     '''
-        variable : ID
-            | ID LBRACKET exp RBRACKET punto_agregar_dimension 
-            | ID LBRACKET exp RBRACKET punto_agregar_dimension LBRACKET exp RBRACKET punto_agregar_dimension 
+        variable : ID punto_meter_operando
+            | ID punto_meter_operando LBRACKET punto_arr_1 exp punto_verif_index_quad_1 RBRACKET actualizar_dimension LBRACKET punto_arr_2 exp punto_verif_index_quad_2 RBRACKET punto_end_matriz_acceso
+            | ID punto_meter_operando LBRACKET punto_arr_1 exp punto_verif_index_quad_1 RBRACKET punto_end_array_acceso
+            
     '''
     p[0] = p[1]
 
-def p_punto_agregar_dimension(p):
+
+def p_punto_end_array_acceso(p):
     '''
-        punto_agregar_dimension : 
+        punto_end_array_acceso : 
     '''
-    inter_code.p_operands.pop()
+    var = p[-7]
+    var_data = funcs_table.search_var(inter_code.scope, var) 
+    inter_code.quad_end_array_access(var_data['dir'])
+
+def p_punto_end_matrz_acceso(p):
+    '''
+        punto_end_matriz_acceso : 
+    '''
+    var = p[-13]
+    var_data = funcs_table.search_var(inter_code.scope, var) 
+    inter_code.quad_end_array_access(var_data['dir'])
+    inter_code.p_operators.pop()
+    print("SE ACABA ACCESO MATRIZ CON OPERANDS, ", inter_code.p_operands)
+
+def p_punto_arr_1(p):
+    '''
+        punto_arr_1 : 
+    '''
+    var = p[-3]
+    var_data = funcs_table.search_var(inter_code.scope, var)
+    
+    if not var_data['is_array']:
+        raise TypeError("La variable no es un arreglo")
+    
+    dir_var = var_data['dir']
+
+    inter_code.p_types.pop()
+
+    inter_code.p_dim[dir_var] = inter_code.cont_dim
+    inter_code.p_operators.append('(')
+
+def p_punto_arr_2(p):
+    '''
+        punto_arr_2 : 
+    '''
+    var = p[-9]
+    var_data = funcs_table.search_var(inter_code.scope, var)
+    
+    if not var_data['is_array']:
+        raise TypeError("La variable no es un arreglo")
+    
+    dir_var = var_data['dir']
+    
+    inter_code.p_types.pop()
+
+    inter_code.p_dim[dir_var] = inter_code.cont_dim
+    inter_code.p_operators.append('(')
+
+def p_punto_verif_index_quad_1(p):
+    '''
+        punto_verif_index_quad_1 : 
+    '''
+    print(f"Estoy en verif quad 1 dim: {inter_code.cont_dim}")
+    var = p[-5]
+    var_data = funcs_table.search_var(inter_code.scope, var)
+    inter_code.quad_verify_index(var_data['dimensions'], 0)
+
+def p_punto_verif_index_quad_2(p):
+    '''
+        punto_verif_index_quad_2 : 
+    '''
+    print(f"Estoy en verif quad 2 dim: {inter_code.cont_dim}")
+    var = p[-11]
+    var_data = funcs_table.search_var(inter_code.scope, var)
+    inter_code.quad_verify_index(var_data['dimensions'], 1)
+
+def p_actualizar_dimension(p):
+    '''
+        actualizar_dimension : 
+    '''
+    inter_code.cont_dim = inter_code.cont_dim + 1
+    inter_code.p_dim[list(inter_code.p_dim)[-1]] = inter_code.cont_dim
 
 def p_expresion(p):
     '''
@@ -338,7 +405,7 @@ def p_punto_meter_operador(p):
 def p_factor(p):
     '''
         factor : var_cte punto_meter_operando_constante
-            | variable punto_meter_operando
+            | variable
             | llamada_a_funcion
             | OPENPAREN punto_meter_fondo exp CLOSEPAREN punto_sacar_fondo
     '''
@@ -450,7 +517,8 @@ def p_lecturaprime(p):
         lecturaprime : variable
             | variable COMMA lecturaprime
     '''
-    inter_code.leer_quad(p[1])
+    var_data = funcs_table.search_var(inter_code.scope, p[1])
+    inter_code.leer_quad(var_data['dir'])
     
 
 def p_rep_no_cond(p):
