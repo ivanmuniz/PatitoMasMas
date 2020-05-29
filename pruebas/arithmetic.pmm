@@ -1,0 +1,8 @@
+programa prueba;
+var int i;
+
+principal() {
+    escribe('Escribe un numero entero');
+    lee(i);
+    escribe("El numero verga", i);
+}

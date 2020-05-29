@@ -1,6 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+import generate_compiler
 from functions_table import FunctionsTable
 from intermediate_code import IntermediateCode
 from virtual_memory import VirtualMemory
@@ -100,16 +101,19 @@ def p_programa(p):
     '''
         programa : PROGRAMA ID SEMICOLON declaraciones funciones PRINCIPAL punto_principal OPENPAREN CLOSEPAREN bloque
     '''
+    p[0] = "PROGRAM COMPILED"
+
     funcs_table.table['global']['vars'] = {}
+
+    f_quads = inter_code.format_quads()
+    f_consts = inter_code.format_consts()
+
+    generate_compiler.generate_obj(p[2], funcs_table.table, f_quads, f_consts)
+
     print(funcs_table.table)
-    
     for (i, quad) in enumerate(inter_code.quadruples, start=1):
         print(i, quad)
-
     print(memory.mem_constantes)
-
-
-    p[0] = "PROGRAM COMPILED"
 
 def p_punto_principal(p):
     '''
@@ -486,19 +490,22 @@ def p_escritura(p):
     '''
         escritura : ESCRIBE OPENPAREN escrituraprime CLOSEPAREN SEMICOLON
     '''
-    inter_code.escribe_quad()
     
-
 def p_escrituraprime(p):
     '''
         escrituraprime :
-            | CTESTRING punto_meter_operando_constante
-            | CTESTRING punto_meter_operando_constante COMMA escrituraprime
-            | expresion COMMA escrituraprime
-            | expresion
+            | CTESTRING punto_meter_operando_constante punto_escribe_quad
+            | CTESTRING punto_meter_operando_constante punto_escribe_quad COMMA escrituraprime
+            | expresion punto_escribe_quad COMMA escrituraprime
+            | expresion punto_escribe_quad
 
     '''
-    inter_code.p_operators.append("ESCRIBE")
+
+def p_punto_escribe_quad(p):
+    '''
+        punto_escribe_quad : 
+    '''
+    inter_code.escribe_quad()
 
 def p_retorno_de_funcion(p):
     '''
