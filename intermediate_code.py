@@ -85,12 +85,11 @@ class IntermediateCode:
         self.quadruples.append(quad)
     
     def escribe_quad(self):
-        while('ESCRIBE' in self.p_operators):
-            result = self.p_operands.pop() 
-            operator = self.p_operators.pop()
-            quad = Quadruple(operator, None, None, result)
 
-            self.quadruples.append(quad)
+        result = self.p_operands.pop() 
+        quad = Quadruple('ESCRIBE', None, None, result)
+
+        self.quadruples.append(quad)
 
     def leer_quad(self, var):
         quad = Quadruple('LEER', None, None, var)
@@ -129,7 +128,8 @@ class IntermediateCode:
         if len(var_dimensions) == 2 and dim == 0:
             aux = self.p_operands.pop()
             result = VirtualMemory().getDir(self.scope, True, 'int')
-            quad = Quadruple('*', aux, var_dimensions[dim]['mdim'], result)
+            const_dim_address = VirtualMemory().addConstant(var_dimensions[dim]['mdim'], 'int')
+            quad = Quadruple('*', aux, const_dim_address, result)
             self.quadruples.append(quad)
             self.p_operands.append(result)
 
@@ -166,7 +166,14 @@ class IntermediateCode:
     def quad_gosub(self, quad_func):
         quad = Quadruple('GOSUB', None, None, quad_func)
         self.quadruples.append(quad)
+    
+    def format_quads(self):
+        quad = Quadruple('END', None, None, None)
+        self.quadruples.append(quad)
+        return [(quad.operator, quad.left_oper, quad.right_oper, quad.result) for quad in self.quadruples]
 
+    def format_consts(self):
+        return [(d, v) for d, v in VirtualMemory().mem_constantes.items()]
         
 
             

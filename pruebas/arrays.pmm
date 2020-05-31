@@ -1,0 +1,8 @@
+programa prueba;
+var int a[10][10], b[2];
+
+principal() {
+    b[1] = 2;
+    a[2][0] = 1;
+    escribe(a[b[1]][0]);
+}

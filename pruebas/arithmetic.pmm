@@ -1,0 +1,10 @@
+programa prueba;
+
+funcion void imprimir(string c)
+{
+    escribe(c);
+}
+
+principal() {
+    imprimir("hola mundo");
+}
