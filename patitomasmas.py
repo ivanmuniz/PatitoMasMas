@@ -9,6 +9,8 @@ from virtual_memory import VirtualMemory
 funcs_table = FunctionsTable()
 inter_code = IntermediateCode()
 memory = VirtualMemory()
+number_params = 0
+variables_count = 0
 
 # RESERVED WORDS
 reserved = { 
@@ -149,6 +151,8 @@ def p_var_dec(p):
             | ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET COMMA var_dec
 
     '''
+    global variables_count
+    variables_count += 1
 
     # Esto itera por la gramatica y regresa las variables
     p[0] = ''
@@ -168,15 +172,32 @@ def p_tipo(p):
 # ------------------------------------ Funciones ------------------------------------
 def p_funciones(p):
     '''
-        funciones : FUNCION retorno ID punto_meter_funcion OPENPAREN parametros_funcion CLOSEPAREN declaraciones punto_func_quad bloque punto_end_func funciones
+        funciones : FUNCION retorno ID punto_meter_funcion OPENPAREN punto_reset_num_params parametros_funcion CLOSEPAREN punto_num_params declaraciones punto_func_quad bloque punto_end_func funciones
             | empty     
     '''
+
+def p_punto_num_params(p):
+    '''
+       punto_num_params : 
+    '''
+    global number_params
+    # print("CONT: ", number_params)
+    funcs_table.addNumberParams(inter_code.scope, number_params)
+
+def p_punto_reset_num_params(p):
+    '''
+        punto_reset_num_params :
+    '''
+    global number_params
+    number_params = 0
 
 def p_punto_func_quad(p):
     '''
         punto_func_quad : 
     '''
     funcs_table.table[inter_code.scope]['quad_no'] = len(inter_code.quadruples) + 1
+    global variables_count
+    print("NUM VARS: ", variables_count)
 
 def p_punto_end_func(p):
     '''
@@ -201,12 +222,13 @@ def p_parametros_funcion(p):
     if p[1] != None:
         funcs_table.add_params(inter_code.scope, p[1])
 
-
 def p_variables_funcion(p):
     '''
         variables_funcion : tipo ID
             | tipo ID COMMA variables_funcion
     '''
+    global number_params
+    number_params += 1
     p[0] = ''
     for i in range(1, len(p)):
         p[0] += p[i] + " "
@@ -512,6 +534,9 @@ def p_retorno_de_funcion(p):
     '''
         retorno_de_funcion : REGRESA OPENPAREN exp CLOSEPAREN SEMICOLON
     '''
+    scope = inter_code.scope
+    tipo_fun = funcs_table.table[scope]['type']
+    inter_code.function_return(tipo_fun)
 
 def p_lectura(p):
     '''

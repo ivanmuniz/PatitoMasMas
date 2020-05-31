@@ -175,8 +175,11 @@ class IntermediateCode:
     def format_consts(self):
         return [(d, v) for d, v in VirtualMemory().mem_constantes.items()]
         
+    def function_return(self, tipo_func):
+        result_type = self.sc.cube['regresa'][tipo_func][self.p_types.pop()]
 
-            
-
-
-
+        if result_type != 'err':
+            quad = Quadruple('REGRESA', None, None, self.p_operands.pop())
+            self.quadruples.append(quad)
+        else:
+            raise TypeError("Return value is different from the one specified in the function")

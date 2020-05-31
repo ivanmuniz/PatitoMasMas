@@ -7,7 +7,7 @@ class SemanticCube:
                     'int': 'int',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'int',
+                    'bool': 'err',
                 },
                 'float': {
                     'int': 'float',
@@ -286,6 +286,32 @@ class SemanticCube:
                     'int' : 'bool',
                     'float' : 'bool',
                     'str' : 'bool',
+                    'bool' : 'bool'
+                }
+            },
+            'regresa': {
+                'int' : {
+                    'int' : 'int',
+                    'float' : 'err',
+                    'str' : 'err',
+                    'bool' : 'err'
+                },
+                'float' : {
+                    'int' : 'err',
+                    'float' : 'float',
+                    'str' : 'err',
+                    'bool' : 'err'
+                },
+                'string' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'str',
+                    'bool' : 'err'
+                },
+                'bool' : {
+                    'int' : 'err',
+                    'float' : 'err',
+                    'str' : 'err',
                     'bool' : 'bool'
                 }
             }

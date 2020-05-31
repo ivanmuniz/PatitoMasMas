@@ -2,6 +2,7 @@ from virtual_memory import VirtualMemory
 
 class FunctionsTable:
     #TODO2: crear funcion para eliminar vars de las funciones, esto se aplicara cuando termine de hacer el parseo.
+    # cont = 0
     def __init__(self):
         self.table = {
             'global': { 'type': 'void', 'vars': {}, 'params': [] }
@@ -50,9 +51,11 @@ class FunctionsTable:
 
             if var_type == "string": 
                 var_type = "str"
-
+            
+            # self.cont += 1
             self.table[function]['vars'][var_name] = {'type': var_type, 'dir': VirtualMemory().getDir(function, False, var_type)}
             self.table[function]['params'].append(var_type)
+            # print("CONT: ", self.cont)
 
     def search_var(self, scope, var):
         if var in self.table[scope]['vars']:
@@ -91,3 +94,7 @@ class FunctionsTable:
             return (var_dims, size)
         else:
             return (None, 1)
+    
+    def addNumberParams(self, context, n_params):
+        self.table[context]['num_params'] = n_params
+            
