@@ -15,7 +15,7 @@ class Memoria:
 
     def mem_func(self, superior, size):
 
-        if self.contador + size > 40000:
+        if self.counter + size > 40000:
             raise TypeError("Stack Overflow")
 
         actual = MemoriaLocal(superior, size)
@@ -42,13 +42,13 @@ class MemoriaLocal:
 
         self.c_int = 0
         self.c_float = 5000
-        self.c_str = 10000
+        self.c_str = 8000
 
         self.superior = superior
         self.size = size
     
 
-    def asign_params(self, params):
+    def assign_params(self, params):
         
         for p in params:
             if type(p) is int:
@@ -58,6 +58,6 @@ class MemoriaLocal:
                 self.mem_local[self.counter+self.c_float] = p
                 self.c_float += 1
             else:
-                self.mem_local[self.counter+self.s_str] = p
+                self.mem_local[self.counter+self.c_str] = p
                 self.c_str += 1
             

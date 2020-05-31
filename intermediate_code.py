@@ -128,7 +128,8 @@ class IntermediateCode:
         if len(var_dimensions) == 2 and dim == 0:
             aux = self.p_operands.pop()
             result = VirtualMemory().getDir(self.scope, True, 'int')
-            quad = Quadruple('*', aux, var_dimensions[dim]['mdim'], result)
+            const_dim_address = VirtualMemory().addConstant(var_dimensions[dim]['mdim'], 'int')
+            quad = Quadruple('*', aux, const_dim_address, result)
             self.quadruples.append(quad)
             self.p_operands.append(result)
 

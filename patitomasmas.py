@@ -277,7 +277,7 @@ def p_punto_end_matrz_acceso(p):
         punto_end_matriz_acceso : 
     '''
     var = p[-13]
-    var_data = funcs_table.search_var(inter_code.scope, var) 
+    var_data = funcs_table.search_var(inter_code.scope, var)
     inter_code.quad_end_array_access(var_data['dir'])
     inter_code.p_operators.pop()
 
@@ -285,6 +285,7 @@ def p_punto_arr_1(p):
     '''
         punto_arr_1 : 
     '''
+    inter_code.p_operands.pop()
     var = p[-3]
     var_data = funcs_table.search_var(inter_code.scope, var)
     
@@ -302,6 +303,7 @@ def p_punto_arr_2(p):
     '''
         punto_arr_2 : 
     '''
+    #inter_code.p_operands.pop()
     var = p[-9]
     var_data = funcs_table.search_var(inter_code.scope, var)
     
@@ -309,7 +311,6 @@ def p_punto_arr_2(p):
         raise TypeError("La variable no es un arreglo")
     
     dir_var = var_data['dir']
-    
     inter_code.p_types.pop()
 
     inter_code.p_dim[dir_var] = inter_code.cont_dim

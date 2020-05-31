@@ -57,7 +57,8 @@ class MaquinaVirtual:
     def get_content(self, address):
         aux_address = int(address[1:-1])
         mem_address = self.get_memory(aux_address)
-        return mem_address[aux_address]
+        arr_addr = mem_address[aux_address]
+        return arr_addr
 
     def process_quads(self, quads, funcs_dir, next=0):
 
@@ -75,22 +76,35 @@ class MaquinaVirtual:
                 left_operand = self.get_content(left_operand)
             if isinstance(right_operand, str) and right_operand[0] == '(':
                 right_operand = self.get_content(right_operand)
-            if isinstance(result, str) and result[0] == '(':
-                result = self.get_content(result)
+                
 
             if operator == '=':
-                mem1, mem2, mem_r = self.get_memories(left_operand, right_operand, result)
-                result_type = self.get_type(result)
-                mem_r[result] = result_type(mem1[left_operand])
+                if isinstance(result, str) and result[0] == '(':
+                    aux_address = int(result[1:-1])
+                    mem_address = self.get_memory(aux_address)
+                    mem1 = self.get_memory(left_operand)
+                    arr_address = mem_address[aux_address]
+                    mem_arr_addr = self.get_memory(arr_address)
+                    mem_arr_addr[arr_address] = mem1[left_operand]
+                else:
+                    mem1, mem2, mem_r = self.get_memories(left_operand, right_operand, result)
+                    result_type = self.get_type(result)
+                    mem_r[result] = result_type(mem1[left_operand])
 
                 next+=1
 
             elif operator == '+':
-                mem1, mem2, mem_r = self.get_memories(left_operand, right_operand, result)
-                if(isinstance(mem1[left_operand], str) and not isinstance(mem2[right_operand], str)) or (isinstance(mem2[right_operand],str) and not isinstance(mem1[left_operand],str)):
-                    mem_r[result] = str(mem1[left_operand]) + str(mem2[right_operand])
+                if isinstance(result, str) and result[0] == '(':
+                    aux_address = int(result[1:-1])
+                    mem_address = self.get_memory(aux_address)
+                    mem1 = self.get_memory(left_operand)
+                    mem_address[aux_address] = int(mem1[left_operand]) + int(right_operand)
                 else:
-                    mem_r[result] = mem1[left_operand] + mem2[right_operand]
+                    mem1, mem2, mem_r = self.get_memories(left_operand, right_operand, result)
+                    if(isinstance(mem1[left_operand], str) and not isinstance(mem2[right_operand], str)) or (isinstance(mem2[right_operand],str) and not isinstance(mem1[left_operand],str)):
+                        mem_r[result] = str(mem1[left_operand]) + str(mem2[right_operand])
+                    else:
+                        mem_r[result] = mem1[left_operand] + mem2[right_operand]
                 
                 next+=1
             
@@ -163,19 +177,40 @@ class MaquinaVirtual:
                 next += 1
             
             elif operator == 'ESCRIBE':
-                mem = self.get_memory(result)
-                print(mem[result])
+                if isinstance(result, str) and result[0] == '(':
+                    try:
+                        dir = self.get_content(result)
+                        mem = self.get_memory(dir) 
+                        print(mem[dir])
+                    except:
+                        print("NULL")
+                        break
+                else:
+                    mem = self.get_memory(result)
+                    print(mem[result])
                 next +=1
             
             elif operator == 'LEER':
-                result_type = self.get_type(result)
-                mem = self.get_memory(result)
-
-                try:
-                    input_result = result_type(input())
-                except:
-                    print("ERROR: El dato de entrada no es del mismo tipo de dato que la variable a leer")
-                    break
+                if isinstance(result, str) and result[0] == '(':
+                    aux_address = int(result[1:-1])
+                    mem_address = self.get_memory(aux_address)
+                    mem1 = self.get_memory(left_operand)
+                    arr_address = mem_address[aux_address]
+                    mem_arr_addr = self.get_memory(arr_address)
+                    arr_type = self.get_type(arr_address)
+                    try:
+                        mem_arr_addr[arr_address] = arr_type(input)
+                    except:
+                        print("ERROR: El dato de entrada no es del mismo tipo de dato que la variable a leer")
+                        break
+                else:
+                    result_type = self.get_type(result)
+                    mem = self.get_memory(result)
+                    try:
+                        input_result = result_type(input())
+                    except:
+                        print("ERROR: El dato de entrada no es del mismo tipo de dato que la variable a leer")
+                        break
                 
                 mem[result] = input_result
                 next+=1
@@ -196,6 +231,37 @@ class MaquinaVirtual:
 
             elif operator == 'GOTO':
                 next = int(result) - 1
+            
+            elif operator == 'ERA':
+                if self.memoria.active is not None:
+                    superior = self.memoria.active
+                else:
+                    superior = self.memoria
+                self.memoria.mem_func(superior, int(result))
+                next += 1
+            
+            elif operator == 'GOSUB':
+                self.memoria.active = self.memoria.mem_ejec[list(self.memoria.mem_ejec.keys())[-1]]
+
+                self.pila_contextos.append(result)
+
+                self.memoria.active.assign_params(params)
+                params = []
+                value = self.process_quads(quads, funcs_dir, int(result) - 1)
+
+                next += 1
+            
+            elif operator == 'PARAM':
+                mem = self.get_memory(left_operand)
+                params.append(mem[left_operand])
+
+                next += 1
+            
+            elif operator == 'ENDFUNC':
+                self.memoria.remove_scope()
+                self.pila_contextos.pop()
+
+                break;
             
             elif operator == 'END':
                 break

@@ -1,8 +1,10 @@
 programa prueba;
-var int i;
+
+funcion void imprimir(string c)
+{
+    escribe(c);
+}
 
 principal() {
-    escribe('Escribe un numero entero');
-    lee(i);
-    escribe("El numero verga", i);
+    imprimir("hola mundo");
 }
