@@ -11,6 +11,7 @@ inter_code = IntermediateCode()
 memory = VirtualMemory()
 number_params = 0
 variables_count = 0
+return_ = False
 
 # RESERVED WORDS
 reserved = { 
@@ -172,9 +173,19 @@ def p_tipo(p):
 # ------------------------------------ Funciones ------------------------------------
 def p_funciones(p):
     '''
-        funciones : FUNCION retorno ID punto_meter_funcion OPENPAREN punto_reset_num_params parametros_funcion CLOSEPAREN punto_num_params declaraciones punto_func_quad bloque punto_end_func funciones
+        funciones : FUNCION retorno ID punto_meter_funcion OPENPAREN punto_reset_num_params parametros_funcion CLOSEPAREN punto_num_params declaraciones punto_func_quad bloque punto_verify_return punto_end_func funciones
             | empty     
     '''
+
+def p_punto_verify_return(p):
+    '''
+        punto_verify_return : 
+    '''
+    global return_
+    if p[-11] != 'void':
+        if not return_:
+            raise Exception("Falta return")
+    return_ = False
 
 def p_punto_num_params(p):
     '''
@@ -204,7 +215,9 @@ def p_punto_end_func(p):
         punto_end_func : 
     '''
     inter_code.end_func_quad()
-    funcs_table.table[p[-10]]['vars'] = {}
+    func_data = funcs_table.table[p[-11]]
+    func_data['num_vars'] = len(list(func_data['vars'].keys())) 
+    func_data['vars'] = {}
 
 def p_punto_meter_funcion(p):
     '''
@@ -537,6 +550,8 @@ def p_retorno_de_funcion(p):
     scope = inter_code.scope
     tipo_fun = funcs_table.table[scope]['type']
     inter_code.function_return(tipo_fun)
+    global return_
+    return_ = True
 
 def p_lectura(p):
     '''
@@ -612,15 +627,19 @@ def p_punto_gosub_quad_1(p):
     '''
         punto_gosub_quad_1 : 
     '''
-    quad_func = funcs_table.table[p[-5]]['quad_no']
-    inter_code.quad_gosub(quad_func)
+    func_data = funcs_table.table[p[-5]]
+    quad_func = func_data['quad_no']
+    func_type = func_data['type']
+    inter_code.quad_gosub(quad_func, func_type)
 
 def p_punto_gosub_quad_2(p):
     '''
         punto_gosub_quad_2 : 
     '''
-    quad_func = funcs_table.table[p[-7]]['quad_no']
-    inter_code.quad_gosub(quad_func)
+    func_data = funcs_table.table[p[-7]]
+    quad_func = func_data['quad_no']
+    func_type = func_data['type']
+    inter_code.quad_gosub(quad_func, func_type)
 
 def p_punto_verify_more_params(p):
     '''
@@ -635,9 +654,8 @@ def p_punto_era_quad(p):
         punto_era_quad : 
     '''
     func_data = funcs_table.table[p[-3]]
-    total_vars = len(func_data['vars'].keys())
 
-    inter_code.era_quad(total_vars)
+    inter_code.era_quad(func_data['num_vars'])
 
 def p_punto_verify_func(p):
     '''

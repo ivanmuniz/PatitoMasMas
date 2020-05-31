@@ -1,10 +1,16 @@
 programa prueba;
+var int i, j, k, z;
 
-funcion void imprimir(string c)
+funcion int fact(int k)
 {
-    escribe(c);
+    escribe(k); 
+    regresa(k);
 }
 
 principal() {
-    imprimir("hola mundo");
+    i = 0;
+    j = 1;
+    k = 2;
+    z = fact(i);
+    escribe(z);
 }

@@ -42,6 +42,13 @@ class FunctionsTable:
     
     def add_function(self, function, type):
         self.table[function] = { 'type': type, 'vars': {}, 'params': [], 'quad_no': None }
+        if type != 'void':
+            if type == 'string':
+                type = 'str'
+            self.table['global']['vars'][function] = {
+                'type': type,
+                'dir': VirtualMemory().getDir(function, True, type)
+            }
     
     def add_params(self, function, params):
         for param in params.split(','):

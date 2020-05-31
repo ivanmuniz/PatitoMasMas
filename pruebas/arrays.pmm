@@ -1,8 +1,17 @@
 programa prueba;
-var int a[10][10], b[2];
+var int a[10][10], b[2], k;
+
+funcion int fact(int k)
+var int i;
+{
+    desde i=1 hasta i > 10 hacer {
+        regresa(k);
+    }
+}
 
 principal() {
-    b[1] = 2;
     a[2][0] = 1;
-    escribe(a[b[1]][0]);
+    escribe(a[2][0]);
+    k = fact(a[2][0]);
+    escribe(k);
 }

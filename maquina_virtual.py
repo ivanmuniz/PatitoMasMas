@@ -249,7 +249,20 @@ class MaquinaVirtual:
                 params = []
                 value = self.process_quads(quads, funcs_dir, int(result) - 1)
 
+                if value is not None:
+                    mem = self.get_memory(left_operand)
+                    mem[left_operand] = value
                 next += 1
+            
+            elif operator == 'REGRESA':
+                mem = self.get_memory(result)
+                returned = mem[result]
+
+                self.memoria.remove_scope()
+                self.pila_contextos.pop()
+
+                return returned
+                next+=1
             
             elif operator == 'PARAM':
                 mem = self.get_memory(left_operand)
@@ -260,8 +273,9 @@ class MaquinaVirtual:
             elif operator == 'ENDFUNC':
                 self.memoria.remove_scope()
                 self.pila_contextos.pop()
-
-                break;
+                break
             
             elif operator == 'END':
+                self.memoria.remove_scope()
+                self.pila_contextos.pop()
                 break
