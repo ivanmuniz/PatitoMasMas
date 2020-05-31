@@ -206,9 +206,9 @@ def p_punto_func_quad(p):
     '''
         punto_func_quad : 
     '''
+    func_data = funcs_table.table[p[-8]]
+    func_data['num_vars'] = len(list(func_data['vars'].keys())) 
     funcs_table.table[inter_code.scope]['quad_no'] = len(inter_code.quadruples) + 1
-    global variables_count
-    print("NUM VARS: ", variables_count)
 
 def p_punto_end_func(p):
     '''
@@ -216,7 +216,6 @@ def p_punto_end_func(p):
     '''
     inter_code.end_func_quad()
     func_data = funcs_table.table[p[-11]]
-    func_data['num_vars'] = len(list(func_data['vars'].keys())) 
     func_data['vars'] = {}
 
 def p_punto_meter_funcion(p):
@@ -622,6 +621,7 @@ def p_llamada_a_funcion(p):
         llamada_a_funcion : ID punto_verify_func OPENPAREN punto_era_quad CLOSEPAREN punto_gosub_quad_1
             | ID punto_verify_func OPENPAREN punto_era_quad argumentos_funcion punto_verify_more_params CLOSEPAREN punto_gosub_quad_2
     '''
+    
 
 def p_punto_gosub_quad_1(p):
     '''
@@ -630,7 +630,9 @@ def p_punto_gosub_quad_1(p):
     func_data = funcs_table.table[p[-5]]
     quad_func = func_data['quad_no']
     func_type = func_data['type']
-    inter_code.quad_gosub(quad_func, func_type)
+    func_dir = funcs_table.table['global']['vars'][p[-5]]
+    inter_code.p_types.append(func_type)
+    inter_code.quad_gosub(quad_func, func_type, func_dir)
 
 def p_punto_gosub_quad_2(p):
     '''
@@ -639,7 +641,9 @@ def p_punto_gosub_quad_2(p):
     func_data = funcs_table.table[p[-7]]
     quad_func = func_data['quad_no']
     func_type = func_data['type']
-    inter_code.quad_gosub(quad_func, func_type)
+    func_dir = funcs_table.table['global']['vars'][p[-7]]
+    inter_code.p_types.append(func_type)
+    inter_code.quad_gosub(quad_func, func_type, func_dir)
 
 def p_punto_verify_more_params(p):
     '''

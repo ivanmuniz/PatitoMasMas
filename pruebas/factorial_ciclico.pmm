@@ -1,0 +1,12 @@
+programa factorial;
+var int entrada, i, resultado;
+
+principal() {
+    resultado = 1;
+    escribe("Escribe el numero para calcular factorial");
+    lee(entrada);
+    desde i = 1 hasta i > entrada hacer {
+        resultado = i*resultado;
+    }
+    escribe(resultado);
+}

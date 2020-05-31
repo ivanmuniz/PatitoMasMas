@@ -163,12 +163,13 @@ class IntermediateCode:
 
         self.quadruples.append(quad)
     
-    def quad_gosub(self, quad_func, func_type):
+    def quad_gosub(self, quad_func, func_type, func_dir):
         return_value = None
-        if func_type != 'void':
-            return_value = VirtualMemory().getDir(self.scope, True, func_type)
-            self.p_operands.append(return_value)
-        quad = Quadruple('GOSUB', return_value, None, quad_func)
+        # if func_type != 'void':
+        #     return_value = VirtualMemory().getDir(self.scope, True, func_type)
+        #     self.p_operands.append(return_value)
+        quad = Quadruple('GOSUB', func_dir['dir'], None, quad_func)
+        self.p_operands.append(func_dir['dir'])
         self.quadruples.append(quad)
      
     def format_quads(self):

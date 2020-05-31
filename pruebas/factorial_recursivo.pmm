@@ -1,0 +1,17 @@
+programa factorial_recursivo;
+var int entrada;
+
+funcion int factorial_recursivo(int i)
+var int aux; 
+{
+    si(i == 0 || i == 1) entonces {
+        regresa(1);
+    }
+    regresa(factorial_recursivo(i - 1)*i);
+}
+
+principal() {
+    escribe("Dime el valor");
+    lee(entrada);
+    escribe(factorial_recursivo(entrada));
+}
