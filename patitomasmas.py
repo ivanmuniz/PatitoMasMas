@@ -204,7 +204,7 @@ def p_punto_end_func(p):
         punto_end_func : 
     '''
     inter_code.end_func_quad()
-    funcs_table.table[p[-8]]['vars'] = {}
+    funcs_table.table[p[-10]]['vars'] = {}
 
 def p_punto_meter_funcion(p):
     '''
