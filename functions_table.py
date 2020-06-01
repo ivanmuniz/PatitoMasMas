@@ -8,6 +8,11 @@ class FunctionsTable:
             'global': { 'type': 'void', 'vars': {}, 'params': [] }
         }
 
+    '''
+    Función para agregar variables a la tabla de variables en base al scope
+    @param string function: funcion en la que se encuentra el programa (scope)
+    @param string vars_dec: linea de declaración de variables por tipo de dato
+    '''
     def add_vars(self, function, vars_dec):
         fun_vars = self.table[function]['vars']
         vars_dec = vars_dec.strip().split(';')
@@ -39,7 +44,11 @@ class FunctionsTable:
                     'is_array': is_array,
                     'dimensions': var_dims_n_size[0]
                 }
-    
+    '''
+    Función para agregar una nueva función (scope) a la tabla de funciones
+    @param string function: nombre de la función
+    @param string type: valor de retorno de la función
+    '''
     def add_function(self, function, type):
         self.table[function] = { 'type': type, 'vars': {}, 'params': [], 'quad_no': None }
         if type != 'void':
@@ -50,6 +59,11 @@ class FunctionsTable:
                 'dir': VirtualMemory().getDir(function, True, type)
             }
     
+    '''
+    Función para agregar a la tabla de de funciones los parametros que recibe una función (scope)
+    @param string function: nombre de la función
+    @param string params: todos los parametros de una función
+    '''
     def add_params(self, function, params):
         for param in params.split(','):
             param_values = param.strip().split(' ')
@@ -64,6 +78,11 @@ class FunctionsTable:
             self.table[function]['params'].append(var_type)
             # print("CONT: ", self.cont)
 
+    '''
+    Función para buscar y regresar una variable en el entorno local y si no se encuentra en el entorno global
+    @param string scope: nombre de la función (scope)
+    @param string var: valor de retorno de la función
+    '''
     def search_var(self, scope, var):
         if var in self.table[scope]['vars']:
             return self.table[scope]['vars'][var]
@@ -72,6 +91,11 @@ class FunctionsTable:
         else: 
             raise TypeError(f"La variable {var} no ha sido declarada")
 
+    '''
+    Función para obtener las dimensiones de un arreglo
+    @param bool is_array: True si es arreglo, sino false
+    @param dimensions dimensions: 
+    '''
     def get_dimensions(self, is_array, dimensions):
         if is_array:
             dim = 0
@@ -102,6 +126,11 @@ class FunctionsTable:
         else:
             return (None, 1)
     
+    '''
+    Función para agregar el numero de parametros que recibe una función a la tabla de funciones
+    @param string context: funcion (scope) en el que se va a agregar el numero de parametros
+    @param int n_params: numero de parametros de la función
+    '''
     def addNumberParams(self, context, n_params):
         self.table[context]['num_params'] = n_params
             

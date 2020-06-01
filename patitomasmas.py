@@ -702,7 +702,7 @@ def p_empty(p):
     pass
 
 def p_error(p):
-    raise TypeError("Error de sintaxixs en el código")
+    raise SyntaxError("Error de sintaxixs en el código")
 
 # Build the parser
 parser = yacc.yacc()

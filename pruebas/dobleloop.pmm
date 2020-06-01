@@ -1,0 +1,10 @@
+programa dobleloop;
+var int i, aux, j;
+
+principal() {
+    desde i = 0 hasta i == 2 hacer {
+        desde j = 0 hasta j == 2 hacer {
+            escribe(i, j);
+        }
+    }
+}
