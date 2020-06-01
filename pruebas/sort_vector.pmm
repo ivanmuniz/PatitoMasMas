@@ -1,0 +1,25 @@
+programa sort;
+var int i, a[5], aux, j, k, aux2;
+
+principal() {
+    a[0] = 5;
+    a[1] = 4;
+    a[2] = 3;
+    a[3] = 2;
+    a[4] = 1;
+
+    desde i = 0 hasta i >= 4 hacer {
+        desde j = 0 hasta j >= (4-i) hacer {
+            aux2 = j + 1;
+            si(a[j] > a[aux2]) entonces {
+                aux = a[j];
+                a[j] = a[aux2];
+                a[aux2] = aux;
+            }
+        }
+    }
+
+    desde k = 0 hasta k >= 4 hacer {
+        escribe(a[k]);
+    }
+}

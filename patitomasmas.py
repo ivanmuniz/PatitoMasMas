@@ -89,7 +89,7 @@ def t_CTEI(t):
     return t
 
 def t_CTESTRING(t):
-    r'"[\w\d\s\,. ]*"|\'[\w\d\s\,. ]*\''
+    r'"[\w\d\s\!@#$&%()-_:;\\-`.+,/\']*"|\'[\w\d\s\!@#$%&()-_:;\\-`.+,/\"]*\''
     return t
 
 def t_ID(t):
@@ -302,6 +302,7 @@ def p_punto_end_array_acceso(p):
     '''
         punto_end_array_acceso : 
     '''
+    print("AQUI TOI")
     var = p[-7]
     var_data = funcs_table.search_var(inter_code.scope, var) 
     inter_code.quad_end_array_access(var_data['dir'])
@@ -627,23 +628,24 @@ def p_punto_gosub_quad_1(p):
     '''
         punto_gosub_quad_1 : 
     '''
+    inter_code.p_operators.pop()
     func_data = funcs_table.table[p[-5]]
     quad_func = func_data['quad_no']
     func_type = func_data['type']
-    func_dir = funcs_table.table['global']['vars'][p[-5]]
     inter_code.p_types.append(func_type)
-    inter_code.quad_gosub(quad_func, func_type, func_dir)
+    inter_code.quad_gosub(quad_func, func_type)
 
 def p_punto_gosub_quad_2(p):
     '''
         punto_gosub_quad_2 : 
     '''
+    inter_code.p_operators.pop()
     func_data = funcs_table.table[p[-7]]
     quad_func = func_data['quad_no']
     func_type = func_data['type']
-    func_dir = funcs_table.table['global']['vars'][p[-7]]
     inter_code.p_types.append(func_type)
-    inter_code.quad_gosub(quad_func, func_type, func_dir)
+    inter_code.quad_gosub(quad_func, func_type)
+
 
 def p_punto_verify_more_params(p):
     '''
@@ -657,6 +659,7 @@ def p_punto_era_quad(p):
     '''
         punto_era_quad : 
     '''
+    inter_code.p_operators.append('(')
     func_data = funcs_table.table[p[-3]]
 
     inter_code.era_quad(func_data['num_vars'])
@@ -698,11 +701,8 @@ def p_empty(p):
     '''
     pass
 
-error = False
 def p_error(p):
-    global error
-    print("Error de sintaxixs en el código")
-    error = True
+    raise TypeError("Error de sintaxixs en el código")
 
 # Build the parser
 parser = yacc.yacc()
@@ -719,6 +719,4 @@ else:
         sys.exit()
 
     parser.parse( f.read() )
-    if not error:
-        print( "Código correcto" )
     f.close()

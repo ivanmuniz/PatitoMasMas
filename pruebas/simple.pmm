@@ -26,7 +26,7 @@ principal() {
     }
 
     mientras(i < 10) haz {
-        escribe('prueba', 'putitas');
+        escribe('@@@', 'putitas');
         escribe(i);
         i = i + 1;
     }

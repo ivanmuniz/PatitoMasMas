@@ -211,6 +211,32 @@ class SemanticCube:
                     'bool' : 'bool'
                 }
             },
+            '!=': {
+                'int' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'bool',
+                    'bool' : 'bool'
+                },
+                'float' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'bool',
+                    'bool' : 'bool'
+                },
+                'str' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'bool',
+                    'bool' : 'bool'
+                },
+                'bool' : {
+                    'int' : 'bool',
+                    'float' : 'bool',
+                    'str' : 'bool',
+                    'bool' : 'bool'
+                }
+            },
             '&&': {
                 'int' : {
                     'int' : 'err',

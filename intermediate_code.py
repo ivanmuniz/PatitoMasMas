@@ -100,18 +100,18 @@ class IntermediateCode:
         self.quadruples.append(quad)
     
     def desde_incremento_quad(self):
-        var = self.p_operands.pop()
-        
         constant_dir = VirtualMemory().addConstant(1, 'int')
-
+        
         result = VirtualMemory().getDir(self.scope, True, 'int')
-        quad = Quadruple('+', var, constant_dir , result)
+        quad = Quadruple('+', self.p_operands.pop(), constant_dir , result)
         self.quadruples.append(quad)
-        quad = Quadruple('=', result, None, var)
+        quad = Quadruple('=', result, None, self.p_operands.pop())
         self.quadruples.append(quad)
     
     def quad_gotov(self):
+        print("TIPOTES", self.p_types)
         exp_type = self.p_types.pop()
+        print(VirtualMemory().mem_constantes)
         if exp_type != 'bool':
             raise TypeError("Type Mismatch")
         
@@ -163,13 +163,12 @@ class IntermediateCode:
 
         self.quadruples.append(quad)
     
-    def quad_gosub(self, quad_func, func_type, func_dir):
+    def quad_gosub(self, quad_func, func_type):
         return_value = None
-        # if func_type != 'void':
-        #     return_value = VirtualMemory().getDir(self.scope, True, func_type)
-        #     self.p_operands.append(return_value)
-        quad = Quadruple('GOSUB', func_dir['dir'], None, quad_func)
-        self.p_operands.append(func_dir['dir'])
+        if func_type != 'void':
+            return_value = VirtualMemory().getDir(self.scope, True, func_type)
+        quad = Quadruple('GOSUB', return_value, None, quad_func)
+        self.p_operands.append(return_value)
         self.quadruples.append(quad)
      
     def format_quads(self):

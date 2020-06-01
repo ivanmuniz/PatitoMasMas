@@ -7,7 +7,7 @@ var int aux;
     si(i == 0 || i == 1) entonces {
         regresa(1);
     }
-    regresa(factorial_recursivo(i - 1)*i);
+    regresa(i*factorial_recursivo(i - 1));
 }
 
 principal() {

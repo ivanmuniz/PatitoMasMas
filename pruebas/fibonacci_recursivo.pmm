@@ -1,0 +1,20 @@
+programa fibonacci;
+var int numeros, i;
+
+funcion int fibonacci(int i){
+    si(i == 0 || i == 1) entonces {
+        regresa(i);
+    } sino {
+        regresa(fibonacci(i - 1) + fibonacci(i - 2));
+    }
+}
+
+principal() {
+    escribe("Escribe cuanto numeros quieres calcular de la serie");
+    lee(numeros);
+
+    desde i=0 hasta i == numeros hacer {
+        escribe(fibonacci(i));
+    }
+  
+}
