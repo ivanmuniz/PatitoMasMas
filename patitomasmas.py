@@ -6,6 +6,9 @@ from functions_table import FunctionsTable
 from intermediate_code import IntermediateCode
 from virtual_memory import VirtualMemory
 
+'''
+    Aqui se encuentra el lex y el yacc del compilador
+'''
 funcs_table = FunctionsTable()
 inter_code = IntermediateCode()
 memory = VirtualMemory()
@@ -115,17 +118,19 @@ def p_programa(p):
     f_quads = inter_code.format_quads()
     f_consts = inter_code.format_consts()
 
+    # Genera archivo compilado
     generate_compiler.generate_obj(p[2], funcs_table.table, f_quads, f_consts)
 
-    print(funcs_table.table)
-    for (i, quad) in enumerate(inter_code.quadruples, start=1):
-        print(i, quad)
-    print(memory.mem_constantes)
+    # print(funcs_table.table)
+    # for (i, quad) in enumerate(inter_code.quadruples, start=1):
+    #     print(i, quad)
+    # print(memory.mem_constantes)
 
 def p_punto_principal(p):
     '''
         punto_principal : 
     '''
+    # Hace fill al primer GOTO para ir a la funcion principal
     inter_code.quadruples[0].result = len(inter_code.quadruples) + 1
 
 # ----------------------- Declaración de variables ----------------------------------
@@ -185,6 +190,7 @@ def p_punto_verify_return(p):
     '''
         punto_verify_return : 
     '''
+    # Verifica que el return no sea de tipo void
     global return_
     if p[-11] != 'void':
         if not return_:
@@ -195,14 +201,15 @@ def p_punto_num_params(p):
     '''
        punto_num_params : 
     '''
+    #Agrega los parametros a la tabla de funciones
     global number_params
-    # print("CONT: ", number_params)
     funcs_table.addNumberParams(inter_code.scope, number_params)
 
 def p_punto_reset_num_params(p):
     '''
         punto_reset_num_params :
     '''
+    #Da reset a number params
     global number_params
     number_params = 0
 
@@ -210,6 +217,7 @@ def p_punto_func_quad(p):
     '''
         punto_func_quad : 
     '''
+    # Guarda el numero de cuadruplo donde comienza la funcion en la tabla de funciones
     func_data = funcs_table.table[p[-8]]
     func_data['num_vars'] = len(list(func_data['vars'].keys())) 
     funcs_table.table[inter_code.scope]['quad_no'] = len(inter_code.quadruples) + 1
@@ -218,6 +226,7 @@ def p_punto_end_func(p):
     '''
         punto_end_func : 
     '''
+    # Genera el cuadruplo ENDFUNC
     inter_code.end_func_quad()
     func_data = funcs_table.table[p[-11]]
     func_data['vars'] = {}
@@ -226,6 +235,7 @@ def p_punto_meter_funcion(p):
     '''
         punto_meter_funcion : 
     '''
+    # Agrega la funcion a la tabla de funciones
     funcs_table.add_function(p[-1], p[-2])
     inter_code.scope = p[-1]
     memory.resetCounters()
@@ -235,6 +245,7 @@ def p_parametros_funcion(p):
         parametros_funcion : variables_funcion
             | empty
     '''
+    # Agrega los parametros a la funcion
     if p[1] != None:
         funcs_table.add_params(inter_code.scope, p[1])
 
@@ -290,6 +301,7 @@ def p_punto_quad_asignacion(p):
     '''
         punto_quad_asignacion : 
     '''
+    # Genera el cuadruplo de asignacion
     inter_code.quad_assignment()
 
 def p_variable(p):
@@ -320,7 +332,7 @@ def p_punto_end_array_acceso(p):
     '''
         punto_end_array_acceso : 
     '''
-    print("AQUI TOI")
+    # Punto neuralgico para generar los cuadruplos necesarios cuando termina el acceso al arreglo
     var = p[-7]
     var_data = funcs_table.search_var(inter_code.scope, var) 
     inter_code.quad_end_array_access(var_data['dir'])
@@ -329,6 +341,7 @@ def p_punto_end_matrz_acceso(p):
     '''
         punto_end_matriz_acceso : 
     '''
+    # Punto neuralgico para generar los cuadruplos necesarios cuando termina el acceso a la matriz
     var = p[-13]
     var_data = funcs_table.search_var(inter_code.scope, var)
     inter_code.quad_end_array_access(var_data['dir'])
@@ -338,6 +351,7 @@ def p_punto_arr_1(p):
     '''
         punto_arr_1 : 
     '''
+    # Punto neuralgico que guarda en la pila de dimensiones un valor y mete un fondo en falso
     inter_code.p_operands.pop()
     var = p[-3]
     var_data = funcs_table.search_var(inter_code.scope, var)
@@ -356,7 +370,7 @@ def p_punto_arr_2(p):
     '''
         punto_arr_2 : 
     '''
-    #inter_code.p_operands.pop()
+    # Punto neuralgico que guarda en la pila de dimensiones un valor y mete un fondo en falso
     var = p[-9]
     var_data = funcs_table.search_var(inter_code.scope, var)
     
@@ -373,6 +387,7 @@ def p_punto_verif_index_quad_1(p):
     '''
         punto_verif_index_quad_1 : 
     '''
+    # Punto neuralgico para generar el cuadruplo que verifica el limite superior con el indice (1era dimension)
     var = p[-5]
     var_data = funcs_table.search_var(inter_code.scope, var)
     inter_code.quad_verify_index(var_data['dimensions'], 0)
@@ -381,6 +396,7 @@ def p_punto_verif_index_quad_2(p):
     '''
         punto_verif_index_quad_2 : 
     '''
+    # Punto neuralgico para generar el cuadruplo que verifica el limite superior con el indice (2nda dimension)
     var = p[-11]
     var_data = funcs_table.search_var(inter_code.scope, var)
     inter_code.quad_verify_index(var_data['dimensions'], 1)
@@ -389,6 +405,7 @@ def p_actualizar_dimension(p):
     '''
         actualizar_dimension : 
     '''
+    # Punto neuralgico para actualizar dimension de la pila de dimensiones
     inter_code.cont_dim = inter_code.cont_dim + 1
     inter_code.p_dim[list(inter_code.p_dim)[-1]] = inter_code.cont_dim
 
@@ -420,6 +437,7 @@ def p_punto_quad_cond(p):
     '''
         punto_quad_cond : 
     '''
+    # Punto neuralgico para generar cuadruplo aritmetico o de condicion
     inter_code.quad_arit_cond()
 
 def p_exp_ar(p):
@@ -440,6 +458,7 @@ def p_punto_quad_arithmetic_exp(p):
     '''
         punto_quad_arithmetic_exp : 
     '''
+    # Punto neuralgico para expresion aritmetica (+ ó -)
     if inter_code.p_operators != []:
         if inter_code.p_operators[-1] in ['+', '-']:
             inter_code.quad_arit_cond()
@@ -448,6 +467,7 @@ def p_punto_quad_arithmetic_term(p):
     '''
         punto_quad_arithmetic_term : 
     '''
+    # Punto neuralgico para terminos (* ó /)
     if inter_code.p_operators != []:
         if inter_code.p_operators[-1] in ['*', '/']:
             inter_code.quad_arit_cond()
@@ -456,6 +476,7 @@ def p_punto_meter_operador(p):
     '''
         punto_meter_operador : 
     '''
+    # Punto neuralgico para meter operador
     inter_code.push_operator(p[-1])
 
 def p_factor(p):
@@ -472,12 +493,14 @@ def p_punto_meter_fondo(p):
     '''
         punto_meter_fondo : 
     '''
+    # Punto neuralgico para metere fondo en falso
     inter_code.p_operators.append('(')
 
 def p_punto_sacar_fondo(p):
     '''
         punto_sacar_fondo : 
     '''
+    # Punto neuralgico para sacarfondo en falso
     fondo = inter_code.p_operators.pop()
     if fondo != '(':
         raise TypeError('No hay fondo')
@@ -495,6 +518,7 @@ def p_punto_meter_operando(p):
     '''
         punto_meter_operando : 
     '''
+    #Punto neuralgico para meter operando
     var = p[-1]
 
     #Obiente informacion(tipo y direccion) de la variable de la tabla de funciones
@@ -526,18 +550,21 @@ def p_punto_quad_statement(p):
     '''
         punto_quad_statement :
     '''
+    # Punto neuralgico que genera cuadruplo para statements
     inter_code.quad_statement()
 
 def p_punto_end_condition(p):
     '''
         punto_end_condition : 
     '''
+    # Punto neuralgico que hace fill cuando termino la condicion
     inter_code.end_condition()
 
 def p_punto_quad_sino(p):
     '''
         punto_quad_sino : 
     '''
+    # Genera cuadruplo GOTO para los sino
     inter_code.quad_sino()
 
 def p_escritura(p):
@@ -559,6 +586,7 @@ def p_punto_escribe_quad(p):
     '''
         punto_escribe_quad : 
     '''
+    # Punto neuralgico que genera el cuadruplo ESCRIBE
     inter_code.escribe_quad()
 
 def p_retorno_de_funcion(p):
@@ -594,6 +622,7 @@ def p_punto_desde_incremento(p):
     '''
         punto_desde_incremento : 
     '''
+    # Genera cuadruplos para aumentar del loop DESDE y hacer fill al GOTOV del loop
     inter_code.desde_incremento_quad()
     inter_code.end_mientras()
 
@@ -601,6 +630,7 @@ def p_punto_desde_gotov(p):
     '''
         punto_desde_gotov : 
     '''
+    # Punto neuralgico para generar el cuadruplo GOTOV
     inter_code.quad_gotov()
 
 def p_punto_meter_desde_var(p):
@@ -627,12 +657,14 @@ def p_punto_mientras(p):
     '''
         punto_mientras : 
     '''
+    # Punto neuralgico para meter numero de cuadruplo en la pila de saltos
     inter_code.p_jumps.append(len(inter_code.quadruples) + 1)
 
 def p_punto_end_mientras(p):
     '''
         punto_end_mientras : 
     '''
+    # Punto neuralgico que genera el GOTO para el loop mientras
     inter_code.end_mientras()
 
 def p_llamada_a_funcion(p):
@@ -641,11 +673,11 @@ def p_llamada_a_funcion(p):
             | ID punto_verify_func OPENPAREN punto_era_quad argumentos_funcion punto_verify_more_params CLOSEPAREN punto_gosub_quad_2
     '''
     
-
 def p_punto_gosub_quad_1(p):
     '''
         punto_gosub_quad_1 : 
     '''
+    # Punto neuralgico que genera el GOSUB para una funcion tipo void
     inter_code.p_operators.pop()
     func_data = funcs_table.table[p[-5]]
     quad_func = func_data['quad_no']
@@ -657,6 +689,7 @@ def p_punto_gosub_quad_2(p):
     '''
         punto_gosub_quad_2 : 
     '''
+    # Punto neuralgico que genera el GOSUB para una funcion NO tipo void
     inter_code.p_operators.pop()
     func_data = funcs_table.table[p[-7]]
     quad_func = func_data['quad_no']
@@ -669,6 +702,7 @@ def p_punto_verify_more_params(p):
     '''
         punto_verify_more_params : 
     '''
+    # Verifica que el numero de argumentos sea igual al numero de parametros
     if len(funcs_table.table[p[-5]]['params']) != (inter_code.cont_param+1):
         raise TypeError("Se necesitan mas argumentos")
 
@@ -677,6 +711,7 @@ def p_punto_era_quad(p):
     '''
         punto_era_quad : 
     '''
+    # Punto neuralgico para generar el cuadruplo ERA
     inter_code.p_operators.append('(')
     func_data = funcs_table.table[p[-3]]
 
@@ -686,6 +721,7 @@ def p_punto_verify_func(p):
     '''
         punto_verify_func : 
     '''
+    # Verifica que la funcion exista
     if p[-1] not in funcs_table.table:
         raise TypeError("No existe la funcion")
 
@@ -699,12 +735,14 @@ def p_punto_increment_cont_param(p):
     '''
         punto_increment_cont_param : 
     '''
+    #Incrementa el contador de parametros
     inter_code.cont_param += 1
 
 def p_punto_param(p):
     '''
         punto_param : 
     '''
+    #Genera el cuadruplo PARAM
     arg_func_type = funcs_table.table[inter_code.scope]['params'][inter_code.cont_param]
     inter_code.quad_param(arg_func_type)
 
