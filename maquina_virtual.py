@@ -2,7 +2,6 @@ import json
 import numpy as np
 from memoria import Memoria
 
-
 class MaquinaVirtual:
     def __init__(self):
         self.program = None
@@ -10,6 +9,10 @@ class MaquinaVirtual:
 
         self.pila_contextos = []
     
+    '''
+        Procesa la informacion del json con informacion del codigo intermedio
+        :param program -> nombre de programa
+    '''
     def process(self, program):
         compiled = f"pruebas/{program}_comp.cuac"
         
@@ -23,6 +26,10 @@ class MaquinaVirtual:
         self.process_consts(compiled_data['Constantes'])
         self.process_quads(compiled_data['Quads'], compiled_data['FuncsDir'])
     
+    '''
+        Procesa las constantes y las guarda en memoria
+        :param consts -> constantes
+    '''
     def process_consts(self, consts):
         for const in consts: 
             dir = const[0]
@@ -30,9 +37,19 @@ class MaquinaVirtual:
 
             self.memoria.mem_constantes[dir] = val
 
+    '''
+        Obtiene las memorias de cada parametro
+        :param left_operand
+        :param right_operand
+        :param result
+    '''
     def get_memories(self, left_operand, right_operand, result):
         return self.get_memory(left_operand), self.get_memory(right_operand), self.get_memory(result)
     
+    '''
+        Obtiene el tipo dependiendo de la direccion
+        :param address -> direccion
+    '''
     def get_type(self, address):
         if 1000 <= address < 5000 or 21000 <= address < 25000:
             return int
@@ -45,6 +62,10 @@ class MaquinaVirtual:
         else:
             return bool
     
+    '''
+        Obtiene la memoria dependiendo de la direccion
+        :param address -> direccion
+    '''
     def get_memory(self, address):
         if address is None:
             return None
@@ -55,12 +76,22 @@ class MaquinaVirtual:
         else: 
             return self.memoria.mem_constantes
     
+    '''
+        Obiene el contenido de los apuntadores a memoria
+        :param address -> direccion
+    '''
     def get_content(self, address):
         aux_address = int(address[1:-1])
         mem_address = self.get_memory(aux_address)
         arr_addr = mem_address[aux_address]
         return arr_addr
 
+    '''
+        Procesa los cuadruplos dependiendo del operador
+        :param quads -> Cuadruplos
+        :param funcs_dir -> Tabla de Funciones
+        :param next -> Contador del siguiente cuadruplo a ejecutar
+    '''
     def process_quads(self, quads, funcs_dir, next=0):
 
         params = []

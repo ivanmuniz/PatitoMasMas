@@ -2,6 +2,7 @@ from semantic_cube import SemanticCube
 from quadruple import Quadruple
 from virtual_memory import VirtualMemory
 
+# Clase que hace operaciones para generar codigo intermedio
 class IntermediateCode:
     def __init__(self):
         self.p_operators = []
@@ -16,10 +17,16 @@ class IntermediateCode:
         self.cont_dim = 0
         self.cont_param = 0
     
+    '''
+        Funcion para meteter operadores a la pila de operadores
+        :param operator -> Operador a meter
+    '''
     def push_operator(self, operator):
         self.p_operators.append(operator)
     
-    #Genera cuadruplos para operaciones aritmeticas y condicionales
+    '''
+        Funcion para generar cuadruplos para operaciones aritmeticas y condicionales
+    '''
     def quad_arit_cond(self):
         operator = self.p_operators.pop()
         right_operando = self.p_operands.pop()
@@ -41,6 +48,9 @@ class IntermediateCode:
         self.p_types.append(result_type)
         self.quadruples.append(quad)
 
+    '''
+        Funcion para generar el cuadruplo de asignacion
+    '''
     def quad_assignment(self):
         operator = self.p_operators.pop()
         right_operando = self.p_operands.pop()
@@ -50,6 +60,9 @@ class IntermediateCode:
 
         self.quadruples.append(quad)
     
+    '''
+        Funcion para generar el cuadruplo de los statements
+    '''
     def quad_statement(self):
         exp_type = self.p_types.pop()
         if exp_type != 'bool':
@@ -60,10 +73,16 @@ class IntermediateCode:
         self.quadruples.append(quad)
         self.p_jumps.append(len(self.quadruples) - 1)
     
+    '''
+        Funcion para hacer fill al cuadruplo que tiene una condicion
+    '''
     def end_condition(self):
         end = self.p_jumps.pop()
         self.quadruples[end].result = len(self.quadruples) + 1
     
+    '''
+        Funcion que genera el goto para el SINO
+    '''
     def quad_sino(self):
         quad = Quadruple('GOTO', None, None, None)
         self.quadruples.append(quad)
@@ -71,6 +90,9 @@ class IntermediateCode:
         self.p_jumps.append(len(self.quadruples) - 1)
         self.quadruples[false].result = len(self.quadruples) + 1
 
+    '''
+        Funcion que genera GOTO para el MIENTRAS y hace fill al cuadruplo end
+    '''
     def end_mientras(self):
         end = self.p_jumps.pop()
         return_goto = self.p_jumps.pop()
@@ -80,10 +102,16 @@ class IntermediateCode:
 
         self.quadruples[end].result = len(self.quadruples) + 1
     
+    '''
+        Funcion que genera el cuadruplo ENDFUNC
+    '''
     def end_func_quad(self):
         quad = Quadruple('ENDFUNC', None, None, None)
         self.quadruples.append(quad)
     
+    '''
+        Funcion que genera el cuadruplo ESCRIBE
+    '''
     def escribe_quad(self):
 
         result = self.p_operands.pop() 
@@ -91,14 +119,23 @@ class IntermediateCode:
 
         self.quadruples.append(quad)
 
+    '''
+        Funcion que genera el cuadruplo LEER
+    '''
     def leer_quad(self, var):
         quad = Quadruple('LEER', None, None, var)
         self.quadruples.append(quad)
     
+    '''
+        Funcion que genera el cuadruplo ERA
+    '''
     def era_quad(self, size):
         quad = Quadruple('ERA', None, None, size)
         self.quadruples.append(quad)
     
+    '''
+        Funcion que genera los cuadruplos para incrementer el valor en el loop HASTA
+    '''
     def desde_incremento_quad(self):
         constant_dir = VirtualMemory().addConstant(1, 'int')
         
@@ -108,10 +145,11 @@ class IntermediateCode:
         quad = Quadruple('=', result, None, self.p_operands.pop())
         self.quadruples.append(quad)
     
+    '''
+        Genera cuadruplo GOTOV
+    '''
     def quad_gotov(self):
-        print("TIPOTES", self.p_types)
         exp_type = self.p_types.pop()
-        print(VirtualMemory().mem_constantes)
         if exp_type != 'bool':
             raise TypeError("Type Mismatch")
         
@@ -120,6 +158,9 @@ class IntermediateCode:
         self.quadruples.append(quad)
         self.p_jumps.append(len(self.quadruples) - 1)
 
+    '''
+        Genera cuadruplo VERIF y las operaciones en cuadruplos para generar direccion de arreglo
+    '''
     def quad_verify_index(self, var_dimensions, dim):
         
         quad = Quadruple('VERIF', self.p_operands[-1], None, var_dimensions[dim]['dims'])
@@ -140,7 +181,10 @@ class IntermediateCode:
             quad = Quadruple('+', aux1, aux2, result)
             self.quadruples.append(quad)
             self.p_operands.append(result)
-        
+    
+    '''
+        Genera cuadruplo que crea el apuntador cuando termina un arreglo
+    '''
     def quad_end_array_access(self, address):
         aux1 = self.p_operands.pop()
         result = VirtualMemory().getDir(self.scope, True, 'int')
@@ -152,6 +196,9 @@ class IntermediateCode:
 
         self.p_operators.pop()
     
+    '''
+        Funcion que genera cuadruplo PARAM; para asignar parametro
+    '''
     def quad_param(self, arg_func_type):
         argument = self.p_operands.pop()
         argument_type = self.p_types.pop()
@@ -163,6 +210,9 @@ class IntermediateCode:
 
         self.quadruples.append(quad)
     
+    '''
+        Funcion que genera el cuadruplo GOSUB
+    '''
     def quad_gosub(self, quad_func, func_type):
         return_value = None
         if func_type != 'void':
@@ -170,15 +220,24 @@ class IntermediateCode:
         quad = Quadruple('GOSUB', return_value, None, quad_func)
         self.p_operands.append(return_value)
         self.quadruples.append(quad)
-     
+    
+    '''
+        Formatea los cuadruplos para usarlos en ejecucion
+    '''
     def format_quads(self):
         quad = Quadruple('END', None, None, None)
         self.quadruples.append(quad)
         return [(quad.operator, quad.left_oper, quad.right_oper, quad.result) for quad in self.quadruples]
 
+    '''
+        Formatea las constantes para usarlos en ejecucion
+    '''
     def format_consts(self):
         return [(d, v) for d, v in VirtualMemory().mem_constantes.items()]
-        
+    
+    '''
+       Genera el cuadruplo REGRESA 
+    '''
     def function_return(self, tipo_func):
         result_type = self.sc.cube['regresa'][tipo_func][self.p_types.pop()]
 
@@ -188,6 +247,9 @@ class IntermediateCode:
         else:
             raise TypeError("Return value is different from the one specified in the function")
     
+    '''
+        Genera el cuadruplo para las operaciones con matrices ($, !, ?)
+    '''
     def quad_matriz_operacion(self, operacion, size, dimensions, var_type):
         size_dir = VirtualMemory().addConstant(size, 'int')
         result = VirtualMemory().getDir(self.scope, True, var_type)
