@@ -10,16 +10,15 @@ principal() {
 
     desde i = 0 hasta i >= 4 hacer {
         desde j = 0 hasta j >= (4-i) hacer {
-            aux2 = j + 1;
-            si(a[j] > a[aux2]) entonces {
+            si(a[j] > a[j+1]) entonces {
                 aux = a[j];
-                a[j] = a[aux2];
-                a[aux2] = aux;
+                a[j] = a[j+1];
+                a[j+1] = aux;
             }
         }
     }
 
-    desde k = 0 hasta k >= 4 hacer {
+    desde k = 0 hasta k > 4 hacer {
         escribe(a[k]);
     }
 }
