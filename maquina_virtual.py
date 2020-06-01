@@ -343,6 +343,35 @@ class MaquinaVirtual:
                 mem_r[result] = transpose
 
                 next+=1
+            
+            elif operator == '?':
+                size = int(left_operand[0]) * int(left_operand[1])
+
+                mem_arr = self.get_memory(right_operand)
+                arr_type = self.get_type(right_operand)
+
+                dims = []
+                aux = []
+                arr_addr = int(right_operand)
+
+                for i in range(size):
+                    try:
+                        val = mem_arr[arr_addr + i]
+                    except:
+                        raise TypeError('Elemento del arreglo no inicializado')
+                    aux.append(val)
+                    if (i+1)%left_operand[0] == 0:
+                        dims.append(aux)
+                        aux = []
+
+                matrix = np.array(dims)  
+                
+                inverse = np.linalg.inv(matrix)
+
+                mem_r = self.get_memory(result)
+                mem_r[result] = inverse
+
+                next+=1
 
 
                 
