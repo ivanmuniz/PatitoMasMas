@@ -1,6 +1,8 @@
+'''
+    Clase que guarda el cubo semantico para verificar las operaciones
+'''
 class SemanticCube:
     def __init__(self):
-        # TODO: incluir chars
         self.cube = {
             '+': {
                 'int':{
