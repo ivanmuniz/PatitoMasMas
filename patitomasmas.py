@@ -44,7 +44,8 @@ tokens = [
     'EQUAL', 'GREATERTHAN', 'LESSTHAN', 'NOTEQUAL', 
     'CEQUAL', 'GREATEROREQUAL', 'LESSEROREQUAL',
     'AND', 'OR','CTEI', 'CTEF', 'CTESTRING', 
-    'LBRACKET', 'RBRACKET'
+    'LBRACKET', 'RBRACKET', 'DETERMINANTE',
+    'TRANSPUESTA', 'INVERSA',
 ] + list(reserved.values())
 
 t_MINUS = r'\-'
@@ -69,6 +70,9 @@ t_AND = r'\&&'
 t_OR = r'\|\|'
 t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
+t_DETERMINANTE = r'\$'
+t_TRANSPUESTA = r'\!'
+t_INVERSA = r'\?'
 
 # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t\n'
@@ -290,12 +294,26 @@ def p_punto_quad_asignacion(p):
 
 def p_variable(p):
     '''
-        variable : ID punto_meter_operando
+        variable : ID punto_meter_operando operaciones_matriz 
             | ID punto_meter_operando LBRACKET punto_arr_1 exp punto_verif_index_quad_1 RBRACKET actualizar_dimension LBRACKET punto_arr_2 exp punto_verif_index_quad_2 RBRACKET punto_end_matriz_acceso
             | ID punto_meter_operando LBRACKET punto_arr_1 exp punto_verif_index_quad_1 RBRACKET punto_end_array_acceso
             
     '''
     p[0] = p[1]
+
+def p_operaciones_matriz(p):
+    '''
+        operaciones_matriz : DETERMINANTE
+            | TRANSPUESTA
+            | INVERSA
+            | empty
+    '''
+    if p[1] is not None:
+        var_data = funcs_table.table[inter_code.scope]['vars'][p[-2]]
+        var_dimensions = var_data['dimensions']
+        if len(var_dimensions) != 2:
+            raise TypeError("Estas operaciones solamente se aceptan con matrices")
+        inter_code.quad_matriz_operacion(p[1], var_data['size'], (var_dimensions[0]['dims'], var_dimensions[1]['dims']), var_data['type'])
 
 
 def p_punto_end_array_acceso(p):

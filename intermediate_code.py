@@ -187,3 +187,15 @@ class IntermediateCode:
             self.quadruples.append(quad)
         else:
             raise TypeError("Return value is different from the one specified in the function")
+    
+    def quad_matriz_operacion(self, operacion, size, dimensions, var_type):
+        size_dir = VirtualMemory().addConstant(size, 'int')
+        result = VirtualMemory().getDir(self.scope, True, var_type)
+        quad = Quadruple(operacion, dimensions, self.p_operands.pop(), result)
+        self.p_operands.append(result)
+        self.quadruples.append(quad)
+
+        if operacion == '$':
+            if dimensions[0] != dimensions[1]:
+                raise TypeError('La matriz debe ser cuadrada')
+         

@@ -37,7 +37,8 @@ class FunctionsTable:
                     'type': type_vars, 
                     'dir': var_dir, 
                     'is_array': is_array,
-                    'dimensions': var_dims_n_size[0]
+                    'dimensions': var_dims_n_size[0],
+                    'size': var_dims_n_size[1]
                 }
     
     def add_function(self, function, type):

@@ -1,4 +1,5 @@
 import json
+import numpy as np
 from memoria import Memoria
 
 
@@ -89,7 +90,7 @@ class MaquinaVirtual:
                 else:
                     mem1, mem2, mem_r = self.get_memories(left_operand, right_operand, result)
                     result_type = self.get_type(result)
-                    mem_r[result] = result_type(mem1[left_operand])
+                    mem_r[result] = (mem1[left_operand])
 
                 next+=1
 
@@ -279,3 +280,77 @@ class MaquinaVirtual:
                 self.memoria.remove_scope()
                 self.pila_contextos.pop()
                 break
+            
+            #OPERACIONES MATRICIALES
+
+            elif operator == '$':
+                size = int(left_operand[0]) * int(left_operand[1])
+
+                mem_arr = self.get_memory(right_operand)
+                arr_type = self.get_type(right_operand)
+
+                if arr_type not in [int, float]:
+                    raise TypeError("Para usar el determinante es necesario que la matriz sea de tipo flotante o entero")
+                
+                dims = []
+                aux = []
+                arr_addr = int(right_operand)
+
+                for i in range(size):
+                    try:
+                        val = mem_arr[arr_addr + i]
+                    except:
+                        raise TypeError('Elemento del arreglo no inicializado')
+                    aux.append(val)
+                    if (i+1)%left_operand[0] == 0:
+                        dims.append(aux)
+                        aux = []
+
+                matrix = np.array(dims)  
+                
+                determinant = np.linalg.det(matrix)
+
+                mem_r = self.get_memory(result)
+                mem_r[result] = determinant
+
+                next+=1
+            
+            elif operator == '!':
+                size = int(left_operand[0]) * int(left_operand[1])
+
+                mem_arr = self.get_memory(right_operand)
+                arr_type = self.get_type(right_operand)
+
+                dims = []
+                aux = []
+                arr_addr = int(right_operand)
+
+                for i in range(size):
+                    try:
+                        val = mem_arr[arr_addr + i]
+                    except:
+                        raise TypeError('Elemento del arreglo no inicializado')
+                    aux.append(val)
+                    if (i+1)%left_operand[0] == 0:
+                        dims.append(aux)
+                        aux = []
+
+                matrix = np.array(dims)  
+                
+                transpose = matrix.transpose()
+
+                mem_r = self.get_memory(result)
+                mem_r[result] = transpose
+
+                next+=1
+
+
+                
+
+
+                
+
+                
+
+                        
+                    
