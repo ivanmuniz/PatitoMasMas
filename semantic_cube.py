@@ -108,7 +108,6 @@ class SemanticCube:
                     'bool': 'err'
                 }
             },
-            # TODO: Faltan los condicionales
             '>': {
                 'int' : {
                     'int' : 'bool',
@@ -343,4 +342,4 @@ class SemanticCube:
                     'bool' : 'bool'
                 }
             }
-        }
+        }    

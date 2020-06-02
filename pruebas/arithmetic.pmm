@@ -1,16 +1,22 @@
-programa prueba;
-var int i, j, k, z;
+programa arithmetic;
+var float num1, num2;
+string operacion;
 
-funcion int fact(int k)
+funcion float sum(float num1, float num2)
 {
-    escribe(k); 
-    regresa(k);
+    regresa(num1+num2);
 }
 
 principal() {
-    i = 0;
-    j = 1;
-    k = 2;
-    z = fact(i);
-    escribe(z);
+    escribe("Dime el primer numero");
+    lee(num1);
+    escribe("Dime el segundo numero");
+    lee(num2);
+
+    escribe("Que operacion quieres hacer (suma, resta, mult, div)");
+    lee(operacion);
+
+    si(operacion == "suma") entonces {
+        escribe("El resultado de la suma es", sum(num1, num2));
+    }
 }

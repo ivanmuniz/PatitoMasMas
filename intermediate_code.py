@@ -38,7 +38,7 @@ class IntermediateCode:
         result_type = self.sc.cube[operator][right_type][left_type]
         
         if result_type  == 'err':
-            raise TypeError(f"unsupported operand type(s) for {operator}: '{left_type}' and '{right_type}'")
+            raise TypeError(f"Tipo de operandos no comptabile para operador {operator}: '{left_type}' y '{right_type}'")
             
         result = VirtualMemory().getDir(self.scope, True, result_type)
 
@@ -66,7 +66,7 @@ class IntermediateCode:
     def quad_statement(self):
         exp_type = self.p_types.pop()
         if exp_type != 'bool':
-            raise TypeError("Type Mismatch")
+            raise TypeError("Tipo no coincide")
         
         result = self.p_operands.pop()
         quad = Quadruple('GOTOF', result, None, None)
@@ -151,7 +151,7 @@ class IntermediateCode:
     def quad_gotov(self):
         exp_type = self.p_types.pop()
         if exp_type != 'bool':
-            raise TypeError("Type Mismatch")
+            raise TypeError("Tipo no coincide")
         
         result = self.p_operands.pop()
         quad = Quadruple('GOTOV', result, None, None)
@@ -245,7 +245,7 @@ class IntermediateCode:
             quad = Quadruple('REGRESA', None, None, self.p_operands.pop())
             self.quadruples.append(quad)
         else:
-            raise TypeError("Return value is different from the one specified in the function")
+            raise TypeError("El valor de retorno es diferente del especificado en la función")
     
     '''
         Genera el cuadruplo para las operaciones con matrices ($, !, ?)

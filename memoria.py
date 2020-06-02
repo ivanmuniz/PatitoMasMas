@@ -32,7 +32,7 @@ class Memoria:
     def mem_func(self, superior, size):
 
         if self.counter + size > 40000:
-            raise TypeError("Stack Overflow")
+            raise TypeError("Desbordamiento de pila")
 
         actual = MemoriaLocal(superior, size)
         dir = self.base_func + self.counter
@@ -70,7 +70,7 @@ class MemoriaLocal:
         self.counter = 21000
 
         self.c_int = 0
-        self.c_float = 5000
+        self.c_float = 4000
         self.c_str = 8000
 
         self.superior = superior

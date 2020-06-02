@@ -27,7 +27,7 @@ class FunctionsTable:
                     var = var[:var.find('[')]
                     
                 if var in self.table[function]['vars']:
-                    raise TypeError("La variable ya existe en el scope")
+                    raise TypeError(f"La variable {var} ya ha sido creada previamente")
                 
                 var_dims_n_size = self.get_dimensions(is_array, dimensions)
 

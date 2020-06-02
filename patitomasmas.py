@@ -122,9 +122,9 @@ def p_programa(p):
     generate_compiler.generate_obj(p[2], funcs_table.table, f_quads, f_consts)
 
     # print(funcs_table.table)
-    # for (i, quad) in enumerate(inter_code.quadruples, start=1):
-    #     print(i, quad)
-    # print(memory.mem_constantes)
+    for (i, quad) in enumerate(inter_code.quadruples, start=1):
+        print(i, quad)
+    print(memory.mem_constantes)
 
 def p_punto_principal(p):
     '''
@@ -194,7 +194,7 @@ def p_punto_verify_return(p):
     global return_
     if p[-11] != 'void':
         if not return_:
-            raise Exception("Falta return")
+            raise Exception("Falta regresa")
     return_ = False
 
 def p_punto_num_params(p):
@@ -357,7 +357,7 @@ def p_punto_arr_1(p):
     var_data = funcs_table.search_var(inter_code.scope, var)
     
     if not var_data['is_array']:
-        raise TypeError("La variable no es un arreglo")
+        raise TypeError("La variable no es un arreglo/matriz")
     
     dir_var = var_data['dir']
 
@@ -375,7 +375,7 @@ def p_punto_arr_2(p):
     var_data = funcs_table.search_var(inter_code.scope, var)
     
     if not var_data['is_array']:
-        raise TypeError("La variable no es un arreglo")
+        raise TypeError("La variable no es un arreglo/matriz")
     
     dir_var = var_data['dir']
     inter_code.p_types.pop()
@@ -535,6 +535,7 @@ def p_punto_meter_operando_constante(p):
     '''
         punto_meter_operando_constante : 
     '''
+    # Punto neurlgico para meter operandos constantes
     dir_constante = memory.addConstant(p[-1], type( p[-1] ).__name__)
     inter_code.p_operands.append(dir_constante)
     inter_code.p_types.append(type(p[-1]).__name__)
@@ -723,7 +724,7 @@ def p_punto_verify_func(p):
     '''
     # Verifica que la funcion exista
     if p[-1] not in funcs_table.table:
-        raise TypeError("No existe la funcion")
+        raise TypeError(f"No existe la funcion {p[-1]}")
 
 def p_argumentos_funcion(p):
     '''
@@ -758,7 +759,7 @@ def p_empty(p):
     pass
 
 def p_error(p):
-    raise TypeError("Error de sintaxixs en el código")
+    raise TypeError("Error de sintaxis en el código")
 
 # Build the parser
 parser = yacc.yacc()

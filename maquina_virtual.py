@@ -288,6 +288,7 @@ class MaquinaVirtual:
             
             elif operator == 'REGRESA':
                 mem = self.get_memory(result)
+                print(mem)
                 returned = mem[result]
 
                 self.memoria.remove_scope()
