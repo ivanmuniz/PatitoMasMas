@@ -402,6 +402,131 @@ class MaquinaVirtual:
                 mem_r[result] = inverse
 
                 next+=1
+            
+            elif operator == '+arr':
+                size = int(left_operand[1][0]) * int(left_operand[1][1])
+
+                mem = self.get_memory(result)
+
+                dims1 = []
+                dims2 = []
+
+                aux1 = []
+                aux2 = []
+
+                arr_addr_1 = int(left_operand[0])
+                arr_addr_2 = int(right_operand[0])
+ 
+                for i in range(size):
+                    try:
+                        val1 = mem[arr_addr_1 + i]
+                        val2 = mem[arr_addr_2 + i]
+                    except:
+                        raise TypeError('Elemento del arreglo no inicializado')
+
+                    aux1.append(val1)
+                    aux2.append(val2)
+
+                    if (i+1)%left_operand[1][0] == 0:
+                        dims1.append(aux1)
+                        aux1 = []
+
+                        dims2.append(aux2)
+                        aux2 = []
+
+                arr1 = np.array(dims1) 
+                arr2 = np.array(dims2)
+
+                mem[result] = np.add(arr1, arr2)
+
+                next += 1
+
+            elif operator == '-arr':
+                size = int(left_operand[1][0]) * int(left_operand[1][1])
+
+                mem = self.get_memory(result)
+
+                dims1 = []
+                dims2 = []
+
+                aux1 = []
+                aux2 = []
+
+                arr_addr_1 = int(left_operand[0])
+                arr_addr_2 = int(right_operand[0])
+ 
+                for i in range(size):
+                    try:
+                        val1 = mem[arr_addr_1 + i]
+                        val2 = mem[arr_addr_2 + i]
+                    except:
+                        raise TypeError('Elemento del arreglo no inicializado')
+
+                    aux1.append(val1)
+                    aux2.append(val2)
+
+                    if (i+1)%left_operand[1][0] == 0:
+                        dims1.append(aux1)
+                        aux1 = []
+
+                        dims2.append(aux2)
+                        aux2 = []
+
+                arr1 = np.array(dims1) 
+                arr2 = np.array(dims2)
+
+                mem[result] = np.subtract(arr1, arr2)
+
+                next += 1
+            
+            elif operator == '*arr':
+                size1 = int(left_operand[1][0]) * int(left_operand[1][1])
+                size2 = int(right_operand[1][0]) * int(right_operand[1][1])
+
+                mem = self.get_memory(result)
+
+                dims1 = []
+                dims2 = []
+
+                aux1 = []
+                aux2 = []
+
+                arr_addr_1 = int(left_operand[0])
+                arr_addr_2 = int(right_operand[0])
+ 
+                for i in range(size1):
+                    try:
+                        val1 = mem[arr_addr_1 + i]
+                    except:
+                        raise TypeError('Elemento del arreglo no inicializado')
+
+                    aux1.append(val1)
+
+                    if (i+1)%left_operand[1][1] == 0:
+                        dims1.append(aux1)
+                        aux1 = []
+                
+                for i in range(size2):
+                    try:
+                        val2 = mem[arr_addr_2 + i]
+                    except:
+                        raise TypeError('Elemento del arreglo no inicializado')
+
+                    aux2.append(val2)
+
+                    if (i+1)%left_operand[1][1] == 0:
+                        dims2.append(aux2)
+                        aux2 = []
+
+                arr1 = np.array(dims1) 
+                arr2 = np.array(dims2)
+
+                mem[result] = np.multiply(arr1, arr2)
+
+                next += 1
+            
+            
+
 
 
                 

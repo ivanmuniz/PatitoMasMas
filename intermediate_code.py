@@ -27,19 +27,54 @@ class IntermediateCode:
     '''
         Funcion para generar cuadruplos para operaciones aritmeticas y condicionales
     '''
-    def quad_arit_cond(self):
+    def quad_arit_cond(self, var_table={}):
+        dim_arr1 = []
+        dim_arr2 = []
+
         operator = self.p_operators.pop()
         right_operando = self.p_operands.pop()
         left_operando = self.p_operands.pop()
 
-        right_type = self.p_types.pop()
-        left_type = self.p_types.pop()
+        right_type_copy = right_type = self.p_types.pop()
+        left_type_copy = left_type = self.p_types.pop()
+        
+        if var_table != {}:
+            for var_data in var_table.values():
+                if right_operando == var_data['dir']:
+                    if 'is_array' in var_data:
+                        if var_data['is_array']:
+                            right_type_copy = 'array'
+                            for dim in var_data['dimensions']:
+                                dim_arr1.append(dim['dims'])
+                if left_operando == var_data['dir']:
+                    if 'is_array' in var_data:
+                        if var_data['is_array']:
+                            left_type_copy = 'array'
+                            for dim in var_data['dimensions']:
+                                dim_arr2.append(dim['dims'])
+
+        
 
         result_type = self.sc.cube[operator][right_type][left_type]
         
         if result_type  == 'err':
             raise TypeError(f"Tipo de operandos no comptabile para operador {operator}: '{left_type}' y '{right_type}'")
-            
+        
+        if dim_arr1 != dim_arr2 and operator in ['-', '+']:
+            raise TypeError("Ambas matrices/arreglos tienen que ser del mismo tamaño")
+
+        if right_type_copy == 'array' and left_type_copy == 'array':
+            if result_type not in ['int', 'float']:
+                raise TypeError(f"Tipo de operandos no comptabile para operador {operator}: '{left_type}' y '{right_type}'")
+            right_operando = (right_operando, dim_arr1)
+            left_operando = (left_operando, dim_arr2)
+            if operator == '+':
+                operator = '+arr'
+            elif operator == '-':
+                operator = '-arr'
+            else:
+                operator = '*arr'
+
         result = VirtualMemory().getDir(self.scope, True, result_type)
 
         quad = Quadruple(operator, left_operando, right_operando, result)
@@ -55,7 +90,12 @@ class IntermediateCode:
         operator = self.p_operators.pop()
         right_operando = self.p_operands.pop()
         left_operando = self.p_operands.pop()
+        right_type = self.p_types.pop()
+        left_type = self.p_types.pop()
         
+        if right_type != left_type:
+            raise TypeError(f"No puedes asignar {right_type} a un {left_type}")
+
         quad = Quadruple(operator, right_operando, None, left_operando )
 
         self.quadruples.append(quad)
