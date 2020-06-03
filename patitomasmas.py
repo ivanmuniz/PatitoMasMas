@@ -126,8 +126,8 @@ def p_programa(p):
     generate_compiler.generate_obj(p[2], funcs_table.table, f_quads, f_consts)
 
     # print(funcs_table.table)
-    for (i, quad) in enumerate(inter_code.quadruples, start=1):
-        print(i, quad)
+    # for (i, quad) in enumerate(inter_code.quadruples, start=1):
+    #     print(i, quad)
     # print(memory.mem_constantes)
 
 def p_punto_principal(p):
