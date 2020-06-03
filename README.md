@@ -106,6 +106,7 @@ principal() {
     escribe("Hola mundo!");
 }
 ```
+Para compilar el programa se hace de la siguiente manera:
 ```
 python patitomasmas.py pruebas/holamundo.pmm
 ```
