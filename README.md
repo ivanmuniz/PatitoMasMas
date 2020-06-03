@@ -3,6 +3,12 @@ Patito++ es un lenguaje de programación imperativo procedural que maneja expres
 
 Los operadores +, -, * se pueden aplicar directamente sobre elementos dimensionados. También existen dos operadores especiales para matrices: $ denota el determinante de una matriz, ! (exclamación cerrada) denota la transpuesta de una matriz.
 
+## Integrantes del Equipo
+| Nombre | Matricula |
+| ------ | --------- |
+| Iván Muñiz Ramírez | A01039386 |
+| Ricardo Acosta Esquivel | A01039456 |
+
 ## Requerimientos para uso del lenguaje
 - Python 3
 - Numpy
@@ -63,6 +69,11 @@ var int i;
 principal() {
     desde i = 0 hasta i == 10 hacer {
         escribe(i);
+    }
+
+    mientras( i < 20 ) haz {
+        escribe(i);
+        i = i + 1;
     }
 }
 ```
@@ -191,9 +202,3 @@ principal() {
   
 }
 ```
-
-## Integrantes del Equipo
-| Nombre | Matricula |
-| ------ | --------- |
-| Iván Muñiz Ramírez | A01039386 |
-| Ricardo Acosta Esquivel | A01039456 |
