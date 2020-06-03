@@ -615,8 +615,7 @@ def p_lecturaprime(p):
         lecturaprime : variable
             | variable COMMA lecturaprime
     '''
-    var_data = funcs_table.search_var(inter_code.scope, p[1])
-    inter_code.leer_quad(var_data['dir'])
+    inter_code.leer_quad()
     
 
 def p_rep_no_cond(p):

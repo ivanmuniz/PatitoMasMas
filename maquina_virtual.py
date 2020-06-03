@@ -210,6 +210,7 @@ class MaquinaVirtual:
             elif operator == 'ESCRIBE':
                 if isinstance(result, str) and result[0] == '(':
                     try:
+                        
                         dir = self.get_content(result)
                         mem = self.get_memory(dir) 
                         print(mem[dir])
@@ -230,7 +231,7 @@ class MaquinaVirtual:
                     mem_arr_addr = self.get_memory(arr_address)
                     arr_type = self.get_type(arr_address)
                     try:
-                        mem_arr_addr[arr_address] = arr_type(input)
+                        mem_arr_addr[arr_address] = arr_type(input())
                     except:
                         print("ERROR: El dato de entrada no es del mismo tipo de dato que la variable a leer")
                         break
@@ -243,7 +244,7 @@ class MaquinaVirtual:
                         print("ERROR: El dato de entrada no es del mismo tipo de dato que la variable a leer")
                         break
                 
-                mem[result] = input_result
+                    mem[result] = input_result
                 next+=1
             
             elif operator == 'GOTOF':

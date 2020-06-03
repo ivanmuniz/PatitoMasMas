@@ -1,18 +1,19 @@
 programa prueba;
-var int a[2][2], b[2][2], k;
+var int a[4], n, i, j;
 
 principal() {
-    a[0][0] = 1;
-    a[0][1] = 2;
-    a[1][0] = 3;
-    a[1][1] = 4;
+    n = 4;
+    
+    i = 0;
+    mientras(i < n) haz {
+        lee(a[i]);
+        i = i + 1;
+    }
 
-    b[0][0] = 1;
-    b[0][1] = 2;
-    b[1][0] = 3;
-    b[1][1] = 4;
-
-    k = a - b;
-
-    escribe(k);
+    j = 0;
+    mientras(j < n) haz {
+        escribe(a[j]);
+        j = j + 1;
+    }
+    
 }

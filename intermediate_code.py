@@ -162,8 +162,8 @@ class IntermediateCode:
     '''
         Funcion que genera el cuadruplo LEER
     '''
-    def leer_quad(self, var):
-        quad = Quadruple('LEER', None, None, var)
+    def leer_quad(self):
+        quad = Quadruple('LEER', None, None, self.p_operands.pop())
         self.quadruples.append(quad)
     
     '''
