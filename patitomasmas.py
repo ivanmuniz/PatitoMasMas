@@ -122,9 +122,9 @@ def p_programa(p):
     generate_compiler.generate_obj(p[2], funcs_table.table, f_quads, f_consts)
 
     # print(funcs_table.table)
-    for (i, quad) in enumerate(inter_code.quadruples, start=1):
-        print(i, quad)
-    print(memory.mem_constantes)
+    # for (i, quad) in enumerate(inter_code.quadruples, start=1):
+    #     print(i, quad)
+    # print(memory.mem_constantes)
 
 def p_punto_principal(p):
     '''
@@ -204,6 +204,7 @@ def p_punto_num_params(p):
     #Agrega los parametros a la tabla de funciones
     global number_params
     funcs_table.addNumberParams(inter_code.scope, number_params)
+    inter_code.cont_param = 0
 
 def p_punto_reset_num_params(p):
     '''
@@ -673,6 +674,7 @@ def p_llamada_a_funcion(p):
         llamada_a_funcion : ID punto_verify_func OPENPAREN punto_era_quad CLOSEPAREN punto_gosub_quad_1
             | ID punto_verify_func OPENPAREN punto_era_quad argumentos_funcion punto_verify_more_params CLOSEPAREN punto_gosub_quad_2
     '''
+    inter_code.cont_param = 0
     
 def p_punto_gosub_quad_1(p):
     '''
@@ -707,7 +709,6 @@ def p_punto_verify_more_params(p):
     if len(funcs_table.table[p[-5]]['params']) != (inter_code.cont_param+1):
         raise TypeError("Se necesitan mas argumentos")
 
-
 def p_punto_era_quad(p):
     '''
         punto_era_quad : 
@@ -725,6 +726,7 @@ def p_punto_verify_func(p):
     # Verifica que la funcion exista
     if p[-1] not in funcs_table.table:
         raise TypeError(f"No existe la funcion {p[-1]}")
+    inter_code.scope = p[-1]
 
 def p_argumentos_funcion(p):
     '''

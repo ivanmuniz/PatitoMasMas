@@ -152,12 +152,11 @@ class MaquinaVirtual:
             
             elif operator == '/':
                 mem1, mem2, mem_r = self.get_memories(left_operand, right_operand, result)
-                result_type = self.get_type(result)
 
                 if mem2[right_operand] == 0:
                     raise TypeError(f"Error: No se puede dividir entre 0")
 
-                mem_r[result] = result_type(mem1[left_operand] / mem2[right_operand])
+                mem_r[result] = float(mem1[left_operand] / mem2[right_operand])
                 next += 1
             
             elif operator == '>':
@@ -288,7 +287,6 @@ class MaquinaVirtual:
             
             elif operator == 'REGRESA':
                 mem = self.get_memory(result)
-                print(mem)
                 returned = mem[result]
 
                 self.memoria.remove_scope()

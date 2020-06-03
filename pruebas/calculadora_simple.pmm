@@ -1,0 +1,49 @@
+programa calculadora_simple;
+var float num1, num2;
+string operacion;
+
+funcion float suma(float num1, float num2)
+{
+    regresa(num1+num2);
+}
+
+funcion float resta(float num1, float num2)
+{
+    regresa(num1-num2);
+}
+
+funcion float mult(float num1, float num2)
+{
+    regresa(num1*num2);
+}
+
+funcion float div(float num1, float num2)
+{
+    regresa(num1/num2);
+}
+
+principal() {
+    escribe("Dime el primer numero");
+    lee(num1);
+    escribe("Dime el segundo numero");
+    lee(num2);
+
+    escribe("Que operacion quieres hacer (suma, resta, mult, div)");
+    lee(operacion);
+
+    si(operacion == "suma") entonces {
+        escribe(suma(num1, num2));
+    }
+
+    si(operacion == "mult") entonces {
+        escribe(mult(num1, num2));
+    }
+
+    si(operacion == "resta") entonces {
+        escribe(resta(num1, num2));
+    }
+
+    si(operacion == "div") entonces {
+        escribe(div(num1, num2));
+    }
+}
