@@ -78,7 +78,7 @@ t_TRANSPUESTA = r'\!'
 t_INVERSA = r'\?'
 
 # A string containing ignored characters (spaces and tabs)
-t_ignore  = ' \t\n'
+t_ignore  = ' \t'
 
 # Error handling rule
 def t_error(t):
@@ -104,6 +104,10 @@ def t_ID(t):
     t.type = reserved.get(t.value, 'ID')
     return t
 
+def t_newline(t):
+     r'\n+'
+     t.lexer.lineno += len(t.value)
+
 # Build the lexer
 lexer = lex.lex()
 
@@ -122,8 +126,8 @@ def p_programa(p):
     generate_compiler.generate_obj(p[2], funcs_table.table, f_quads, f_consts)
 
     # print(funcs_table.table)
-    # for (i, quad) in enumerate(inter_code.quadruples, start=1):
-    #     print(i, quad)
+    for (i, quad) in enumerate(inter_code.quadruples, start=1):
+        print(i, quad)
     # print(memory.mem_constantes)
 
 def p_punto_principal(p):
@@ -462,7 +466,7 @@ def p_punto_quad_arithmetic_exp(p):
     # Punto neuralgico para expresion aritmetica (+ ó -)
     if inter_code.p_operators != []:
         if inter_code.p_operators[-1] in ['+', '-']:
-            inter_code.quad_arit_cond()
+            inter_code.quad_arit_cond(funcs_table.table[inter_code.scope]['vars'])
 
 def p_punto_quad_arithmetic_term(p):
     '''
@@ -471,7 +475,7 @@ def p_punto_quad_arithmetic_term(p):
     # Punto neuralgico para terminos (* ó /)
     if inter_code.p_operators != []:
         if inter_code.p_operators[-1] in ['*', '/']:
-            inter_code.quad_arit_cond()
+            inter_code.quad_arit_cond(funcs_table.table[inter_code.scope]['vars'])
 
 def p_punto_meter_operador(p):
     '''
@@ -761,7 +765,7 @@ def p_empty(p):
     pass
 
 def p_error(p):
-    raise SyntaxError("Error de sintaxixs en el código")
+    raise SyntaxError(f"Error de sintaxixs en el código\nLinea: {p.lineno - 1}")
 
 # Build the parser
 parser = yacc.yacc()

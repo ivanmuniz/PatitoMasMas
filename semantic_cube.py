@@ -10,24 +10,35 @@ class SemanticCube:
                     'float': 'float',
                     'str': 'err',
                     'bool': 'err',
+                    'array': 'err'
                 },
                 'float': {
                     'int': 'float',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'float'
+                    'bool': 'float',
+                    'array': 'err'
                 },
                 'str': {
                     'int': 'err',
                     'float': 'err',
                     'str': 'str',
-                    'bool': 'err'
+                    'bool': 'err',
+                    'array': 'err'
                 },
                 'bool': {
                     'int': 'int',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'int'
+                    'bool': 'int',
+                    'array': 'err'
+                },
+                'array': {
+                    'array': 'array',
+                    'int': 'err',
+                    'float':'err',
+                    'bool':'err',
+                    'str': 'err'
                 }
             },
             '-': {
@@ -35,25 +46,37 @@ class SemanticCube:
                     'int': 'int',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'int'
+                    'bool': 'int',
+                    'array': 'err'
                 },
                 'float': {
                     'int': 'float',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'float'
+                    'bool': 'float',
+                    'array': 'err'
                 },
                 'str': {
                     'int': 'err',
                     'float': 'err',
                     'str': 'err',
-                    'bool': 'err'
+                    'bool': 'err',
+                    'array': 'err'
                 },
                 'bool':{
                     'int': 'int',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'err'
+                    'bool': 'err',
+                    'array': 'err'
+                },
+                'array': {
+                    'array': 'array',
+                    'int': 'err',
+                    'float':'err',
+                    'bool':'err',
+                    'str': 'err',
+                    'array': 'err'
                 }
             },
             '/': {
@@ -61,25 +84,37 @@ class SemanticCube:
                     'int': 'float',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'float'
+                    'bool': 'float',
+                    'array': 'err'
                 },
                 'float': {
                     'int': 'float',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'float'
+                    'bool': 'float',
+                    'array': 'err'
                 },
                 'str': {
                     'int': 'err',
                     'float': 'err',
                     'str': 'str',
-                    'bool': 'float'
+                    'bool': 'float',
+                    'array': 'err'
                 },
                 'bool':{
                     'int': 'float',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'float'
+                    'bool': 'float',
+                    'array': 'err'
+                },
+                'array': {
+                    'array': 'err',
+                    'int': 'err',
+                    'float':'err',
+                    'bool':'err',
+                    'str': 'err',
+                    'array': 'err'
                 }
             },
             '*': {
@@ -87,25 +122,37 @@ class SemanticCube:
                     'int': 'int',
                     'float': 'float',
                     'str': 'str',
-                    'bool': 'int'
+                    'bool': 'int',
+                    'array': 'err'
                 },
                 'float': {
                     'int': 'float',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'float'
+                    'bool': 'float',
+                    'array': 'err'
                 },
                 'str': {
                     'int': 'str',
                     'float': 'err',
                     'str': 'err',
-                    'bool': 'err'
+                    'bool': 'err',
+                    'array': 'err'
                 },
                 'bool':{
                     'int': 'int',
                     'float': 'float',
                     'str': 'err',
-                    'bool': 'err'
+                    'bool': 'err',
+                    'array': 'err'
+                },
+                'array': {
+                    'array': 'array',
+                    'int': 'err',
+                    'float':'err',
+                    'bool':'err',
+                    'str': 'err',
+                    'array': 'err'
                 }
             },
             '>': {
