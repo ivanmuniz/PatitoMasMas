@@ -67,12 +67,24 @@ class VirtualMemory(object):
             bool    [47000 - 48999] 
     '''
 
+    '''
+    Función para obtener una dirección de memoria que va a ser asociada a una variable, constante o temporal.
+    @param string segmento: Scope en el que se encuentra el programa
+    @param bool temp: Si la variable es temporal o no
+    @param string type: Tipo de dato al que le quieres asociar la dirección
+    '''
     def getDir(self, segmento, temp, type, size=1):
         if temp:
             return self._checkTypeTemp(type, segmento)
         else:
             return self._checkType(type, segmento, size)
 
+    '''
+    Funcion privada para obtener la dirección a asociar para una variable normal
+    @param string type: Tipo de dato al que le quieres asociar la dirección
+    @param string segmento: Scope en el que se encuentra el programa
+    @param string size: Para desplazar los contadores en caso de asociar la direccion de un arreglo o matriz
+    '''
     def _checkType(self, type, segmento, size):
         BASE = self._BASE_GLOBAL if segmento == 'global' else self._BASE_CONSTANTES if segmento == 'constante' else self._BASE_LOCAL
         segmento = self.segmento_global if segmento == 'global' else self.segmento_constantes if segmento == 'constante' else self.segmento_local
@@ -93,6 +105,11 @@ class VirtualMemory(object):
             segmento[3] += size
             return dir
 
+    '''
+    Funcion privada para obtener la dirección a asociar para una variable temporal
+    @param string type: Tipo de dato al que le quieres asociar la dirección
+    @param string segmento: Scope en el que se encuentra el programa
+    '''
     def _checkTypeTemp(self, type, segmento):
         BASE_TEMP = self._BASE_LOCAL_TEMP if segmento != 'global' else self._BASE_GLOBAL_TEMP
         segmento_temp = self.segmento_local_temporal if segmento != 'global' else self.segmento_global_temporal
@@ -125,8 +142,11 @@ class VirtualMemory(object):
     '''
     Las constantes SÓLO se gurdan una vez.
     Por ejemplo si te encuentras un 2 y despues en otra funcion hay un 2, la direccion de memoria de ambos 2 es la misma
+
+    Funcion para guardar y asociarle una dirección a una constante
+    @param * value: Valor de la constante
+    @param string type: Typo de dato de la constante
     '''
-    # TODO: Checar como se deben de guarar las constantes e implementar la función
     def addConstant(self, value, type):
         if value in self.mem_constantes.values():
             for dir, val in self.mem_constantes.items():
