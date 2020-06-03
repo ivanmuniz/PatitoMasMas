@@ -1,8 +1,6 @@
 class VirtualMemory(object):
     _instance = None
 
-    mem_global = {}
-    mem_local = {}
     mem_constantes = {}
 
     # Bases donde inician las memorias
