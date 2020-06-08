@@ -1,6 +1,18 @@
 programa find_vector;
 var int numero, i, a[5], tamano, resultado;
 
+funcion int buscar(int numero) {
+    desde i = 0 hasta i >= tamano hacer {
+        si(numero == a[i]) entonces {
+            regresa(i);
+            i = tamano;
+        }
+        si(i == (tamano - 1) && resultado == -1) entonces {
+            regresa(-1);
+        }
+    }
+}
+
 principal() {
     a[0] = 1;
     a[1] = 2;
@@ -13,15 +25,6 @@ principal() {
     escribe("Dime el numero que quieres buscar");
     lee(numero);
 
-    
-    desde i = 0 hasta i >= tamano hacer {
-        si(numero == a[i]) entonces {
-            escribe("Numero encontrado");
-            i = tamano;
-        }
-        si(i == (tamano - 1) && resultado == -1) entonces {
-            escribe("Numero no encontrado");
-        }
-    }
+    escribe(buscar(numero));
     
  }

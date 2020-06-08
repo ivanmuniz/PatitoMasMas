@@ -1,12 +1,23 @@
 programa factorial;
 var int entrada, i, resultado;
 
-principal() {
+funcion int patito(int a, int b) {
+    regresa(a*b);
+}
+
+funcion int fact(int numero) 
+var int resultado;
+{
     resultado = 1;
+    desde i = 1 hasta i > numero hacer {
+        resultado = patito(i, resultado);
+    }
+    regresa(resultado);
+}
+
+principal() {
     escribe("Escribe el numero para calcular factorial");
     lee(entrada);
-    desde i = 1 hasta i > entrada hacer {
-        resultado = i*resultado;
-    }
+    resultado = fact(entrada);
     escribe(resultado);
 }

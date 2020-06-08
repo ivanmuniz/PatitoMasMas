@@ -1,12 +1,34 @@
 programa matriz_operaciones;
-var int a[2][2],k;
+var int a[3][3];
+
+funcion void operaciones() {
+    escribe(a!);
+    escribe(a$);
+    escribe(a?);
+}
+
+funcion void desplegar()
+var int i, j;
+{
+    desde i = 0 hasta i == 3 hacer {
+        desde j = 0 hasta j == 3 hacer {
+            escribe(a[i][j]);
+        }
+    }
+}
+
+funcion void leerDatos()
+var int i, j;
+{
+    desde i = 0 hasta i == 3 hacer {
+        desde j = 0 hasta j == 3 hacer {
+            a[i][j] = i * 2;
+        }
+    }
+}
 
 principal() {
-    a[0][0] = 0;
-    a[0][1] = 1;
-    a[1][0] = 2;
-    a[1][1] = 3;
-    
-    k = a?;
-    escribe(k);
+    leerDatos();
+    desplegar();
+    operaciones();
 }

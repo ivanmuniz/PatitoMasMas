@@ -13,5 +13,5 @@ var int aux;
 principal() {
     escribe("Dime el valor");
     lee(entrada);
-    escribe(factorial_recursivo(entrada));
+    escribe(factorial_recursivo(factorial_recursivo(entrada)));
 }

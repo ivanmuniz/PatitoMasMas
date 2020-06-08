@@ -1,0 +1,66 @@
+programa mult_mat;
+var int a[3][3], b[3][3], resultado[3][3];
+
+funcion void desplegarMatriz()
+var int i, j;
+{
+    escribe("Valores de la matriz:");
+    desde i = 0 hasta i == 3 hacer {
+        desde j = 0 hasta j == 3 hacer {
+            escribe(resultado[i][j]);
+        }
+    }
+}
+
+funcion void multiplicacion()
+var int i, j, k;
+{
+    desde i = 0 hasta i == 3 hacer {
+        desde j = 0 hasta j == 3 hacer {
+            desde k = 0 hasta k == 3 hacer {
+                resultado[i][j] = resultado[i][j] + a[i][k] * b[k][j];
+            }
+        }
+    }
+}
+
+funcion void llenarMatrizA()
+var int i, j;
+{   
+    escribe("Ingrese los valores de la matriz A:");
+    desde i = 0 hasta i == 3 hacer {
+        desde j = 0 hasta j == 3 hacer {
+            lee(a[i][j]);
+        }
+    }
+}
+
+funcion void llenarMatrizB()
+var int i, j;
+{   
+    escribe("Ingrese los valores de la matriz B:");
+    desde i = 0 hasta i == 3 hacer {
+        desde j = 0 hasta j == 3 hacer {
+            lee(b[i][j]);
+        }
+    }
+}
+
+funcion void initMatRes()
+var int i, j;
+{
+    desde i = 0 hasta i == 3 hacer {
+        desde j = 0 hasta j == 3 hacer {
+            resultado[i][j] = 0;
+        }
+    }
+        
+}
+
+principal() {
+    initMatRes();
+    llenarMatrizA();
+    llenarMatrizB();
+    multiplicacion();
+    desplegarMatriz();
+}

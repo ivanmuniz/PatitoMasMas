@@ -326,7 +326,7 @@ def p_operaciones_matriz(p):
             | empty
     '''
     if p[1] is not None:
-        var_data = funcs_table.table[inter_code.scope]['vars'][p[-2]]
+        var_data = funcs_table.search_var(inter_code.scope, p[-2])
         var_dimensions = var_data['dimensions']
         if len(var_dimensions) != 2:
             raise TypeError("Estas operaciones solamente se aceptan con matrices")

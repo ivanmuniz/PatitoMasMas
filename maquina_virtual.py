@@ -295,7 +295,7 @@ class MaquinaVirtual:
 
                 return returned
                 next+=1
-            
+
             elif operator == 'PARAM':
                 mem = self.get_memory(left_operand)
                 params.append(mem[left_operand])
@@ -395,9 +395,12 @@ class MaquinaVirtual:
                         dims.append(aux)
                         aux = []
 
-                matrix = np.array(dims)  
-                
-                inverse = np.linalg.inv(matrix)
+                matrix = np.array(dims)
+                try:
+                    inverse = np.linalg.inv(matrix)
+                except:
+                    print("No se puede determinar la inversa de una matriz con determinante de 0")
+                    break
 
                 mem_r = self.get_memory(result)
                 mem_r[result] = inverse
